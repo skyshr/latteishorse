@@ -11,8 +11,11 @@
     <div>
         <form action="">
             <div>
-                <label for = "id">ID : </label>
-                <input id = "id" placeholder = "ID를 입력하세요">
+                <label for = "userid">ID : </label>
+                <input type="text" id = "userid" placeholder = "ID를 입력하세요" checkResult="fail">
+                <button type="button" class="idCheck" onclick="idOverlap()">중복검사</button>
+                <img id="id_check_sucess" style="display: none;">
+                
             </div>
             <div>
                 <label for = "pwd">비밀번호 : </label>
@@ -30,8 +33,16 @@
                 <label for = "email">이메일: </label>
                 <input id = "email" placeholder = "이메일을 입력하세요">
             </div>
+            <div>
+                <label for = "addr">주소: </label>
+                <input id = "addr" placeholder = "">
+            </div>
+            <div>
+                <label for = "addrDet">상세 주소: </label>
+                <input id = "addrDet" placeholder = "상세 주소를 입력하세요">
+            </div>
             <br>
-            <button type = "button" id = "signUpBtn">회원가입</button>
+            <button type = "submit" id = "signUpBtn">회원가입</button>
         </form>
     </div>
 </body>

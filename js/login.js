@@ -1,9 +1,10 @@
-const id = document.querySelector("#id");
+const userid = document.querySelector("#userid");
 const pwd = document.querySelector("#pwd");
 const logInBtn = document.querySelector("#logInBtn");
 
 logInBtn.addEventListener("click", logIn);
 
-function logIn() {
-    
+function logIn(e) {
+    e.preventDefault();
+
 };

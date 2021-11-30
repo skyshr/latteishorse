@@ -1,19 +1,20 @@
-const id = document.querySelector("#id");
+const userid = document.querySelector("#userid");
 const username = document.querySelector("#username");
 const pwd = document.querySelector("#pwd");
 const checkPwd = document.querySelector("#checkPwd");
 const email = document.querySelector("#email");
 const signUpBtn = document.querySelector("#signUpBtn");
-
-// const crypto = require("crypto");
+const addr = document.querySelector("#addr");
+const addrDet = document.querySelector("#addrDet");
 
 var re = /^[A-Za-z0-9]{5,15}[@]{1}[A-Za-z0-9]{5,10}[.]{1}[A-Za-z]{2,3}$/;
 
 signUpBtn.addEventListener("click", signUp);
 
-function signUp(){
-    if (!id.value) {
-        id.focus();
+function signUp(e){
+    e.preventDefault()
+    if (!userid.value) {
+        userid.focus();
         return alert("아이디를 입력해주세요.");
     }
     else if (!pwd.value) {
@@ -33,42 +34,25 @@ function signUp(){
         email.focus();
         return alert("올바른 이메일 주소를 입력하세요.");
     }
-    
+    else if (!addr.value) {
+        addr.focus();
+        return alert("주소");
+    }
+    else if (!addrDet.value) {
+        addrDet.focus();
+        return alert("상세 주소를 입력하세요.");
+    }
+    else if (userid.getAttribute("checkResult") == "fail"){
+        alert("아이디 중복체크를 해주시기 바랍니다.");
+        userid.focus();
+        return false;
+      }
+    else{
+        alert("회원가입이 완료되었습니다")
+        location.reload();
+    }
 };
 
-
-// const password = "비밀번호486";
-
-// 회원가입할 때
-// salt 생성
-// crypto.randomBytes(64, (error, buf) => {
-//     if (error) {
-//         console.log(error);
-//         return;
-//     }
-//     const salt = buf.toString("base64");
-//     // 생성한 salt 기반으로 비밀번호 암호화
-//     crypto.pbkdf2(password, salt, 256, 64, "sha512", (err, key) => {
-//         if (err) {
-//             console.log(err);
-//             return;
-//         }
-//         const hash = key.toString("base64");
-
-//         // 로그인 시에 비밀번호 비교
-//         const pw = "비밀번호485";
-//         crypto.pbkdf2(pw, salt, 256, 64, "sha512", (err2, key2) => {
-//             if (err2) {
-//                 console.log(err2);
-//                 return;
-//             }
-
-//             const hash2 = key2.toString("base64");
-//             if (hash === hash2) {
-//                 console.log("로그인 성공!");
-//             } else {
-//                 console.log("로그인 실패!");
-//             }
-//         });
-//     });
-// });
+function idOverlap() {
+    userid.addEventListener
+}
