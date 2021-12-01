@@ -4,8 +4,8 @@ const bodyParser = require("body-parser");
 const dotenv = require('dotenv').config();
 const session = require("express-session");
 
-// app.use(express.static('css'));
-// app.use(express.static('js'));
+app.use(express.static(`${__dirname}/css`));
+app.use(express.static(`${__dirname}/js`));
 app.use(express.static('views'));
 
 app.set('view engine', 'pug');
