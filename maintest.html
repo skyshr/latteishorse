@@ -7,24 +7,7 @@
     <title>Test</title>
 </head>
 <body>
-    
-    <script>
-        let signUpWindow, logInWindow;
-
-        var popupX = (document.body.offsetWidth / 2) - (570 / 2);
-        var popupY= (window.screen.height / 2) - (350 / 2);
-        
-        function openSignUp() {
-            window.name = "mainTest";
-            signUpWindow = window.open("./views/signup.html", "logInForm", "width=570, height=350, left = "+ popupX + ", top= "+ popupY + "resizable = no, scrollbars = no");
-        }
-        function openlogIn() {
-            window.name = "mainTest";
-            signUpWindow = window.open("./views/login.html", "logInForm", "width=570, height=350, left = "+ popupX + ", top= "+ popupY + "resizable = no, scrollbars = no");
-        }
-
-        
-    </script>
+    <script src="./js/maintest.js"></script>
 
     <br>
     <b><p size="5" color="gray">회원가입 및 로그인</p></b>

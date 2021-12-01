@@ -1,0 +1,38 @@
+doctype html
+html
+    head
+        meta(charset='UTF-8')
+        meta(http-equiv='X-UA-Compatible' content='IE=edge')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        title 회원가입
+        script(src='./signup.js' defer)
+        script(src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js")
+        link(rel='stylesheet' type='text/css' href='../css/signup.css')
+    body
+        div
+            form(id="signupSubmit" action='/signup' method='POST')
+                div
+                    label(for='userid') ID : 
+                    input#userid(name='id' type='text' require placeholder='ID를 입력하세요' checkresult='fail')
+                    span#alertId.alertInput  ID를 입력하세요!!!
+                    button.checkId(type='button' onclick='idOverlap()') 중복검사
+                div
+                    label(for='pwd') 비밀번호 : 
+                    input#pwd(name='password' type='password' require placeholder='비밀번호를 입력하세요')
+                div
+                    label(for='checkPwd') 비밀번호 확인 : 
+                    input#checkPwd(type='password' require placeholder='비밀번호를 입력하세요')
+                div
+                    label(for='username') 이름 : 
+                    input#username(name='username' require placeholder='이름을 입력하세요')
+                div
+                    label(for='email') 이메일 : 
+                    input#email(name='email' require placeholder='이메일을 입력하세요')
+                div
+                    label(for='addr') 주소 :
+                    input(name="address" type="text" id="addr" require placeholder="주소를 입력하세요" readonly)
+                div
+                    label(for='addrDet') 상세 주소 : 
+                    input#addrDet(name='addressdet' require placeholder='상세 주소를 입력하세요')
+                br
+                button#signUpBtn(type='submit') 회원가입
