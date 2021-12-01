@@ -6,5 +6,4 @@ logInBtn.addEventListener("click", logIn);
 
 function logIn(e) {
     e.preventDefault();
-
 };

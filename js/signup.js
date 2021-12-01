@@ -16,7 +16,7 @@ signUpBtn.addEventListener("click", signUp);
 
 
 function signUp(e){
-    e.preventDefault()
+    // e.preventDefault()
     if (!userid.value) {
         userid.focus();
         // return alert("아이디를 입력해주세요.");
