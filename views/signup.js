@@ -53,10 +53,11 @@ function signUp(e){
     }
     else{
         alert("회원가입이 완료되었습니다")
-        return new Promise((resolve, reject) => {
-            signupSubmit.submit();
-            resolve();
-        })
+        signupSubmit.submit();
+
+        // return new Promise((resolve, reject) => {
+        //     resolve();
+        // })
     }
 };
 
