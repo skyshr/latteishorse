@@ -11,7 +11,7 @@ const idChecked = document.querySelector("#idChecked");
 const signupSubmit = document.querySelector("#signupSubmit");
 
 
-var re = /^[A-Za-z0-9]{5,15}[@]{1}[A-Za-z0-9]{5,10}[.]{1}[A-Za-z]{2,3}$/;
+// var re = /^[A-Za-z0-9]{5,15}[@]{1}[A-Za-z0-9]{5,10}[.]{1}[A-Za-z]{2,3}$/;
 
 signUpBtn.addEventListener("click", signUp);
 
@@ -35,7 +35,7 @@ function signUp(e){
         username.focus();
         alert("이름을 입력해주세요")
     }
-    else if (!email.value || re.test(email)) {
+    else if (!email.value) {
         email.focus();
         alert("올바른 이메일 주소를 입력하세요.");
     }
