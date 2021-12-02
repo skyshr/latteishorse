@@ -19,21 +19,14 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie : {
-        maxAge:(1000 * 60 * 100)
+        maxAge:(1000 * 60 * 30)
     },
 }));
 
 const host = '127.0.0.1';
 const port = 3000;
 
-const mysql = require('mysql');
-const e = require("express");
-var con = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE
-});
+const pool = require("./mysqlcon");
 
 app.get('/', (req, res) => {
     res.render('maintest'); 
@@ -45,14 +38,17 @@ app.get('/signup', (req, res) => {
 
 app.post('/signup', (req, res) => { 
     console.log(req.body.address);
-    con.connect((err) => {      
+    pool.getConnection((err, connection) => {
+        if(err) throw err;      
+
         var sQuery = `INSERT INTO userinfo (userid, userpassword, username, useremail, useraddress, useraddressdet) VALUES ('${req.body.id}', '${req.body.password}', '${req.body.username}', '${req.body.email}', '${req.body.address}', '${req.body.addressdet}')`;
         
-        con.query(sQuery, (err, result, fields) => {
-            console.log(sQuery);
+        connection.query(sQuery, (err, result, fields) => {
             console.log(result);
-           
         });
+        
+
+        connection.release();
     });
 });
 
@@ -61,25 +57,30 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    con.connect((err) => {       
-        // var sQuery = `SELECT userid, userpassword FROM userinfo`;
+    pool.getConnection((err, connection) => {
+        if(err) throw err;
+
         var sQuery = `SELECT userid, userpassword FROM userinfo where userid='${req.body.id}'`;
         console.log(sQuery);
         
-        con.query(sQuery, (err, result, fields) => {
+        connection.query(sQuery, (err, result, fields) => {
             if(err) return res.send("<script>alert('없는 아이디 입니다.');</script>");
 
+
             console.log(result[0]);
-            console.log(result[0].userid);
-            if(req.body.id == result[0].userid) {
-                if(req.body.pwd == result[0].userpassword) {
-                    console.log("로그인 성공");
-                    req.session['loginstate'] = 'okay';
-                    res.send("<script>window.close();</script>");
-                    console.log(req.session.loginstate);
-                }
-            }; 
+            if(!result[0]) {
+                res.send("<script>alert('없는 아이디 입니다.');</script>");
+            }
+            // else if(req.body.id == result[0].userid) {
+            //     if(req.body.pwd == result[0].userpassword) {
+            //         console.log("로그인 성공");
+            //         req.session['loginstate'] = 'okay';
+            //         res.send("<script>window.close();</script>");
+            //         console.log(req.session['loginstate']);
+            //     }
+            // }; 
         });
+        connection.release();
     });
 });
 
