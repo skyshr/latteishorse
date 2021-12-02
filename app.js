@@ -27,6 +27,7 @@ const host = '127.0.0.1';
 const port = 3000;
 
 const mysql = require('mysql');
+const e = require("express");
 var con = mysql.createConnection({
     host: process.env.HOST,
     user: process.env.USER,
@@ -38,33 +39,49 @@ app.get('/', (req, res) => {
     res.render('maintest'); 
 });
 
-app.get('/login', (req, res) => {
-    res.render('login'); 
-});
-
 app.get('/signup', (req, res) => {
-    console.log("열기성공");
     res.render('signup'); 
 });
 
 app.post('/signup', (req, res) => { 
     console.log(req.body.address);
-    con.connect((err) => {       
+    con.connect((err) => {      
         var sQuery = `INSERT INTO userinfo (userid, userpassword, username, useremail, useraddress, useraddressdet) VALUES ('${req.body.id}', '${req.body.password}', '${req.body.username}', '${req.body.email}', '${req.body.address}', '${req.body.addressdet}')`;
         
         con.query(sQuery, (err, result, fields) => {
-            if(err) throw err;
-            console.log("Database NODEPOTFOLIO Create Success!!!");
+            console.log(sQuery);
             console.log(result);
-            // console.log(fields);
+           
         });
     });
 });
 
-// app.get('/result', (req, res) => {0
-//     const result = JSON.parse(newUser.toString(newUser));
-//     res.render('result', JSON.stringify(newUser)); 
-// });
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.post('/login', (req, res) => {
+    con.connect((err) => {       
+        // var sQuery = `SELECT userid, userpassword FROM userinfo`;
+        var sQuery = `SELECT userid, userpassword FROM userinfo where userid='${req.body.id}'`;
+        console.log(sQuery);
+        
+        con.query(sQuery, (err, result, fields) => {
+            if(err) return res.send("<script>alert('없는 아이디 입니다.');</script>");
+
+            console.log(result[0]);
+            console.log(result[0].userid);
+            if(req.body.id == result[0].userid) {
+                if(req.body.pwd == result[0].userpassword) {
+                    console.log("로그인 성공");
+                    req.session['loginstate'] = 'okay';
+                    res.send("<script>window.close();</script>");
+                    console.log(req.session.loginstate);
+                }
+            }; 
+        });
+    });
+});
 
 app.listen(port, host, () => {
     console.log(`Application running at http://${host}:${port}/`);
