@@ -10,9 +10,6 @@ const checkId = document.querySelector(".checkId");
 const idChecked = document.querySelector("#idChecked");
 const signupSubmit = document.querySelector("#signupSubmit");
 
-
-var re = /^[A-Za-z0-9]{5,15}[@]{1}[A-Za-z0-9]{5,10}[.]{1}[A-Za-z]{2,3}$/;
-
 signUpBtn.addEventListener("click", signUp);
 
 
@@ -35,7 +32,7 @@ function signUp(e){
         username.focus();
         alert("이름을 입력해주세요")
     }
-    else if (!email.value || re.test(email)) {
+    else if (!email.value) {
         email.focus();
         alert("올바른 이메일 주소를 입력하세요.");
     }
@@ -51,14 +48,10 @@ function signUp(e){
         alert("아이디 중복체크를 해주시기 바랍니다.");
         userid.focus();
     }
-    else{
-        alert("회원가입이 완료되었습니다")
-        signupSubmit.submit();
-
-        // return new Promise((resolve, reject) => {
-        //     resolve();
-        // })
-    }
+    else {
+        alert("회원가입이 완료되었습니다");
+        return signupSubmit.submit();
+    };
 };
 
 function idOverlap() {
@@ -71,7 +64,6 @@ function idOverlap() {
         checkId.style.display = "inline";
         idChecked.style.display = "none";
     });
-    
     // 아이디가 기존 db에 존재하면
     // alert ("이미 존재하는 ID입니다");
     // 존재하지 않으면 
