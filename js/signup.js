@@ -67,14 +67,16 @@ function idOverlap() {
         idChecked.style.display = "none";
     });
     // 아이디가 기존 db에 존재하면
-    // alert ("이미 존재하는 ID입니다");
+    // alert ("이미 존재하는 ID입니다"); 
     // 존재하지 않으면 
     alert ("사용가능한 ID입니다");
     userid.setAttribute("checkResult", "success");
     checkId.style.display = "none";
     idChecked.style.display = "inline";
 };
-
+document.getElementById("checkid").addEventListener("click", function(){
+    
+})
 
 document.getElementById("addr").addEventListener("click", function(){ 
     new daum.Postcode({

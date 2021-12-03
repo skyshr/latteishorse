@@ -14,7 +14,7 @@ html
                 div
                     label(for='userid') ID : 
                     input#userid(name='id' type='text' require placeholder='ID를 입력하세요' checkresult='fail')
-                    button.checkId(type='button' onclick='idOverlap()') 중복검사
+                    button(type='button' id='checkid' onclick='idOverlap()') 중복검사
                     span#idChecked(style="display : none") 중복확인완료
                 div
                     label(for='pwd') 비밀번호 : 
