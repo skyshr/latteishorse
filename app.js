@@ -49,16 +49,18 @@ app.post('/signup', (req, res) => {
         connection.query(checkQuery, (err, result, fields) => {
             if(err) throw err;
 
-            if(result[0].length != 0) {
+            if(result[0]) {
                 connection.release();
+                res.render("./signup", {message:"idcheckerror"});
             } else {
                 connection.query(sQuery, (err, result, fields) => {
                     if(err) throw err;
-                    
+                
                     console.log(result); 
                 });
-                 connection.release();
-            }
+                connection.release();
+                res.send("<script>window.close();</script>");
+            };
         });
     });
 });
@@ -92,7 +94,7 @@ app.post('/login', (req, res) => {
                     req.session.loginstate = 'okay';
                     req.session.uid = result[0].userid;
                     res.send("<script>window.close();</script>");
-                    console.log(req.session['loginstate']);
+                    console.log(req.session.loginstate);
                 }
                 else {
                     console.log("비밀번호 오류");
