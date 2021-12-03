@@ -5,7 +5,7 @@ http.createServer(async (req, res) => {
     try {
         if (req.url=='/') {
             const data = await fs.readFile('test.html');
-            res.writeHead(200, {'Content-Type' : 'html/text'});
+            res.writeHead(200, {'Content-Type' : 'text/html'});
             return res.end(data);
         }
 

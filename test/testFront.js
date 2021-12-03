@@ -4,23 +4,24 @@
 
 async function placeImg(line) {
     try {
+        let res = ''
         if (line=="all") {
-            const res = await axios.get('/all');
+            res = await axios.get('/all');
         }
         else if (line=="top") {
-            const res = await axios.get('/top');
+            res = await axios.get('/top');
         }
         else if (line=="jng") {
-            const res = await axios.get('/jng');
+            res = await axios.get('/jng');
         }
         else if (line=="mid") {
-            const res = await axios.get('/mid');
+            res = await axios.get('/mid');
         }
         else if (line=="adc") {
-            const res = await axios.get('/adc');
+            res = await axios.get('/adc');
         } 
         else {
-            const res = await axios.get('/sup');
+            res = await axios.get('/sup');
         }
         const data = res.data;
         let box = document.querySelector('.main-container');
@@ -30,17 +31,24 @@ async function placeImg(line) {
         
         Object.keys(data).map((key) => {
             const mainDiv = document.createElement('div');
-            mainDiv.setAttribute('class', 'test');
             const imgDiv = document.createElement('div');
             const contentDiv = document.createElement('div');
             const champimg = document.createElement('img');
-            champimg.setAttribute('src', `./iconimg/${key}.jpg`);
-            contentDiv.textContent = key;
+            if(data[key]!="1") {
+                champimg.setAttribute('src', `./iconimg/${key}.png`);
+            }
+            contentDiv.innerHTML = data[key];
 
             imgDiv.appendChild(champimg);
             imgDiv.appendChild(contentDiv);
             mainDiv.appendChild(imgDiv);
             box.appendChild(mainDiv);
+            if (data[key]=="1") {
+                imgDiv.setAttribute('class', 't1');
+                champimg.setAttribute('src', './iconimg/Teemo.png');
+            }
+            mainDiv.setAttribute('class', 'test');
+
         });
     } catch (err) {
         console.error(err);
@@ -50,10 +58,10 @@ async function placeImg(line) {
 var sections = document.querySelectorAll('.line');
 
 for (var i = 0; i<sections.length; i++) {
-    sections.item(i).addEventListner('click', (e) => {
+    sections[i].addEventListener('click', (e) => {
         e.preventDefault();
         const text = e.target.innerHTML;
-        console.log(text);
+        // console.log(text);
         let str = '';
         try {
             if (text=="전체") {
@@ -68,12 +76,13 @@ for (var i = 0; i<sections.length; i++) {
             else if (text=="미드") {
                 str = 'mid';
             }
-            else if (text=="바텀") {
+            else if (text=="원딜") {
                 str = 'adc';
             }
             else {
                 str = 'sup';
             }
+            // console.log("str: " + str);
             placeImg(str);
         } catch(err) {
             console.error(err);
