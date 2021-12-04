@@ -3,7 +3,6 @@ const app = express();
 const bodyParser = require("body-parser");
 const dotenv = require('dotenv').config();
 const session = require("express-session");
-const axios = require("axios");
 
 app.use(express.static(`${__dirname}/css`));
 app.use(express.static(`${__dirname}/js`));
@@ -51,7 +50,7 @@ app.post('/signup', (req, res) => {
 
             if(result[0]) {
                 connection.release();
-                res.render("./signup", {message:"idcheckerror"});
+                res.send('<script>alert("이미 있는 아이디입니다 다시 입력해주세요"); window.location.href = "/signup"; </script>');
             } else {
                 connection.query(sQuery, (err, result, fields) => {
                     if(err) throw err;
@@ -82,27 +81,25 @@ app.post('/login', (req, res) => {
 
             console.log(result[0]);
             if(result.length == 0) {
-                // res.send("<script>alert('없는 아이디 입니다.');</script>");
-                // 변수값하나를 바꿔서 저장시킨다음에
-                // res.render("./login", {message:"아이디 오류"});
-                res.render("./login", {message:"iderror"});
-                // res.redirect("./login");
+                connection.release();
+                res.send('<script>alert("아이디를 확인해주세요"); window.location.href = "/login"; </script>');
             }
             else if(req.body.id == result[0].userid) {
                 if(req.body.pwd == result[0].userpassword) {
                     console.log("로그인 성공");
                     req.session.loginstate = 'okay';
                     req.session.uid = result[0].userid;
-                    res.send("<script>window.close();</script>");
+                    connection.release();
+                    res.send("<script>opener.parent.location.reload();window.close();</script>");
                     console.log(req.session.loginstate);
                 }
                 else {
                     console.log("비밀번호 오류");
-                    res.render("./login", {message:"pwerror"});
+                    connection.release();
+                    res.send('<script>alert("비밀번호를 확인해주세요"); window.location.href = "/login"; </script>');
                 }
             }; 
         });
-        connection.release();
     });
 });
 

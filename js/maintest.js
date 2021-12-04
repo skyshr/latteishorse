@@ -1,5 +1,4 @@
 window.onload = function(){
-
     document.getElementById("login").addEventListener("click", function(){
         var signUpWindow;
         var popupX= (document.body.offsetWidth / 2) - (570 / 2);
