@@ -32,6 +32,13 @@ app.get('/', (req, res) => {
     res.render('maintest', {loginstate:req.session.loginstate, id:req.session.uid}); 
 });
 
+app.post('/logout', (req, res) => {
+    delete req.session.loginstate;
+    delete req.session.uid;
+    res.send('<script>window.location.href = "/"; </script>'); 
+    console.log(req.session.loginstate)
+});
+
 app.get('/signup', (req, res) => {
     res.render('signup'); 
 });
@@ -106,3 +113,9 @@ app.post('/login', (req, res) => {
 app.listen(port, host, () => {
     console.log(`Application running at http://${host}:${port}/`);
 })
+
+// req.session.save(function(){ 
+//     rsp.redirect('/');
+// });
+// delete req.session.uid;
+// req.session.destory(function(err){});
