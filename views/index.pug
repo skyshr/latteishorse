@@ -5,7 +5,7 @@ head
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
   title Document
   link(rel='stylesheet', href='/css/index.css', type='text/css')
-
+  script(src='./js/maintest.js' defer)
 header
   nav.navbar
     .nav_logo
@@ -21,10 +21,17 @@ header
       li
         a(href='#') &#xCEE4;&#xBBA4;&#xB2C8;&#xD2F0;
     ul.nav_signUp
-      li
-        a(href='#') SignIn
-      li
-        a(href='#') SignUp
+      if(!loginstate)
+        li
+          input(type='button' value='회원가입' id='signup')
+        li
+          input(type='button' value='로그인' id='login')
+      if(loginstate == "okay")
+        li
+          input(type='button' value='마이페이지' id='mypage')
+        li
+          form(id="logoutbtn" action='/logout' method='POST')
+            button#logoutBtn(type='submit') 로그아웃
     .nav_toggleBtn
       .line1
       .line2

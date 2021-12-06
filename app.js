@@ -5,7 +5,7 @@ const dotenv = require('dotenv').config();
 const session = require("express-session");
 
 // app.use(express.static(`${__dirname}/css`));
-app.use(express.static(`${__dirname}/js`));
+// app.use(express.static(`${__dirname}/js`));
 app.use(express.static(`views`));
 // app.use(express.static(`css`));
 // app.use(express.static(`${__dirname}/views`));
@@ -32,9 +32,9 @@ const port = 3000;
 
 const pool = require("./mysqlcon");
 
-// app.get('/', (req, res) => {
-//     res.render('maintest', {loginstate:req.session.loginstate, id:req.session.uid}); 
-// });
+app.get('/test', (req, res) => {
+    res.render('maintest', {loginstate:req.session.loginstate, id:req.session.uid}); 
+});
 app.get('/', (req, res) => {
     res.render('index', {loginstate:req.session.loginstate, id:req.session.uid}); 
 });
