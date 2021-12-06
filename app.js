@@ -38,6 +38,11 @@ app.get('/', (req, res) => {
     console.log(req.session.uid);
 });
 
+// 스킨페이지테스트중
+app.get('/skinTrade', (req, res) => {
+    res.render('skinTrade'); 
+});
+
 app.post('/logout', (req, res) => {
     delete req.session.loginstate;
     delete req.session.uid;

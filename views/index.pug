@@ -13,13 +13,14 @@ header
         img(src='/img/main/Logo_03_999x451.png', style='width: 130px; height: 50px;')
     ul.nav_menu
       li
-        a(href='/') Home
+        form(action='', method='get')
+          input(type='submit', value='HOME')
       li
-        a(href='#') &#xCE90;&#xB9AD;&#xD130;DB
+        form(action='', method='get')
+          input(type='submit', value='캐릭터DB')
       li
-        a(href='#') &#xCE90;&#xB9AD;&#xD130;&#xC2A4;&#xD0A8;
-      li
-        a(href='/board/page') &#xCEE4;&#xBBA4;&#xB2C8;&#xD2F0;
+        form(action='skinTrade', method='get')
+          input(type='submit', value='캐릭터스킨')
     ul.nav_signUp
       if(!loginstate)
         li
