@@ -21,6 +21,9 @@ header
       li
         form(action='skinTrade', method='get')
           input(type='submit', value='캐릭터스킨')
+      li
+        form(action='/board/page', method='get')
+          input(type='submit', value='커뮤니티')
     ul.nav_signUp
       if(!loginstate)
         li

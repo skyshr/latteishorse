@@ -144,11 +144,11 @@ app.get('/board/write', (req, res) => {  // board/write 로 접속하면 글쓰�
 });
 
 app.post('/board/write', (req, res) => {
-    var name = req.body.name;                   
+    var userid= req.body.userid;                   
     var title = req.body.title;
     var content = req.body.content;
     var passwd = req.body.passwd;
-    var datas = [name, title, content, passwd]; // 모든데이터를 배열로 묶기
+    var datas = [userid, title, content, passwd]; // 모든데이터를 배열로 묶기
     // req 객체로 body 속성에서 input 파라미터 가져오기
     pool.getConnection((err, connection) =>{
         if(err) throw err;
@@ -179,11 +179,11 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
 
 app.post('/board/update', (req, res) => {
     var idx = req.body.idx;
-    var name = req.body.name;
+    var userid = req.body.userid;
     var title = req.body.title;
     var content = req.body.content;
     var passwd = req.body.passwd;
-    var datas = [idx, name, title, content, passwd]; // 변수설정한 값을 datas 에 배열화
+    var datas = [idx, userid, title, content, passwd]; // 변수설정한 값을 datas 에 배열화
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
