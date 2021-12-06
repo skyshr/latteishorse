@@ -32,11 +32,10 @@ const port = 3000;
 
 const pool = require("./mysqlcon");
 
-app.get('/test', (req, res) => {
-    res.render('maintest', {loginstate:req.session.loginstate, id:req.session.uid}); 
-});
 app.get('/', (req, res) => {
     res.render('index', {loginstate:req.session.loginstate, id:req.session.uid}); 
+    console.log(req.session.loginstate);
+    console.log(req.session.uid);
 });
 
 app.post('/logout', (req, res) => {
@@ -57,6 +56,7 @@ app.post('/signup', (req, res) => {
 
         var sQuery = `INSERT INTO userinfo (userid, userpassword, username, useremail, useraddress, useraddressdet) VALUES ('${req.body.id}', '${req.body.password}', '${req.body.username}', '${req.body.email}', '${req.body.address}', '${req.body.addressdet}')`;
         var checkQuery = `SELECT userid FROM userinfo where userid='${req.body.id}'`;
+        // var sQuery2 = `SELECT * FROM userboard WHERE userid=${req.session.uid}`;
         
 
         connection.query(checkQuery, (err, result, fields) => {
@@ -106,6 +106,7 @@ app.post('/login', (req, res) => {
                     connection.release();
                     res.send("<script>opener.parent.location.reload();window.close();</script>");
                     console.log(req.session.loginstate);
+                    console.log(req.session.uid);
                 }
                 else {
                     console.log("비밀번호 오류");
@@ -142,6 +143,8 @@ app.post('/form', (req, res) => { // post 요청에 응당하는 router
 
 app.get('/board/list', (req, res) => {  // list/1 이 아니라  /list 로만 라우팅됫을때 /list/1 로 보내준다
     res.redirect('/board/list/1');
+    console.log("==============");
+    console.log(req.session.loginstate);
 });
 
 app.get('/board/list/:page', (req, res) => { // board/list/page숫자 형식으로 받을거
@@ -152,7 +155,7 @@ app.get('/board/list/:page', (req, res) => { // board/list/page숫자 형식으�
             "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate from userboard";
         connection.query(sQuery, (err, rows) => {  // select 쿼리문 날린 데이터를 rows 변수에 담는다 오류가 있으면 err
             if(err) throw err;
-            res.render('list', {title : '게시판 리스트', rows:rows});
+            res.render('list', {title : '게시판 리스트', rows:rows, loginstate: req.session.loginstate, id:req.session.uid});
         });
         connection.release();
     });
