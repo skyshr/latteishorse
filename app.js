@@ -155,7 +155,7 @@ app.post('/board/write', (req, res) => {
         var sQuery = "insert into userboard(userid, title, content, regdate, modidate, passwd,hit) values(?,?,?,now(),now(),?,0)";  // ? 는 매개변수
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
-            res.redirect('/board/list')
+            res.redirect('/board/page')
         })
         connection.release();
     });
@@ -232,7 +232,7 @@ app.post('/board/delete', (req, res) => {
             else if(result.affectedRows == 0){
                 res.send("<script>alert('패스워드가 일치하지 않습니다.');history.back();</script>");
             } else {
-                res.redirect('/board/list');
+                res.redirect('/board/page');
             }
         });
         connection.release();
