@@ -4,12 +4,16 @@ const bodyParser = require("body-parser");
 const dotenv = require('dotenv').config();
 const session = require("express-session");
 
-app.use(express.static(`${__dirname}/css`));
+// app.use(express.static(`${__dirname}/css`));
 app.use(express.static(`${__dirname}/js`));
-app.use(express.static('views'));
+app.use(express.static(`views`));
+// app.use(express.static(`css`));
+// app.use(express.static(`${__dirname}/views`));
+// app.use(express.static(`views`));
 
 app.set('view engine', 'pug');
 app.set('views', './views');
+// app.set('views', './');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -28,8 +32,11 @@ const port = 3000;
 
 const pool = require("./mysqlcon");
 
+// app.get('/', (req, res) => {
+//     res.render('maintest', {loginstate:req.session.loginstate, id:req.session.uid}); 
+// });
 app.get('/', (req, res) => {
-    res.render('maintest', {loginstate:req.session.loginstate, id:req.session.uid}); 
+    res.render('index', {loginstate:req.session.loginstate, id:req.session.uid}); 
 });
 
 app.post('/logout', (req, res) => {
