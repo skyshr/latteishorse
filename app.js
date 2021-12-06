@@ -139,6 +139,23 @@ app.get('/board/page', (req, res) => {  // list/1 이 아니라  /list 로만 �
     console.log(req.session.loginstate);
 });
 
+app.get('/board/page/:page', (req, res) => { // 게시글 리스트에 :page가 추가된것임
+    var page = req.params.page; // 현재 페이지는 params 을 req 요청받아옴
+    pool.getConnection((err, connection) => {
+        if(err) throw err;
+        var sQuery =  "select idx, userid, title, date_format(modidate,'%Y-%m-%d %H:%i:%s') modidate, " +
+        "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard";  // select 구절 그대로
+
+        connection.query(sQuery, (err, rows) => {
+            if (err) throw err;
+            res.render('page', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid}); 
+            // length 데이터 전체넘버 랜더링,-1을 한이유는 db에서는1부터지만 for문에서는 0부터 시작 ,page_num: 한페이지에 보여줄 갯수
+            console.log(rows.length-1);
+        });
+        connection.release();
+    });
+});
+
 app.get('/board/write', (req, res) => {  // board/write 로 접속하면 글쓰기페이지로 이동
     res.render('write', {title : "게시판 글쓰기"})
 });
@@ -175,9 +192,8 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
     });
 });
 
-
-
 app.post('/board/update', (req, res) => {
+    console.log("update")
     var idx = req.body.idx;
     var userid = req.body.userid;
     var title = req.body.title;
@@ -187,36 +203,17 @@ app.post('/board/update', (req, res) => {
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
-            var sQuery = "UPDATE userboard set userid=?, title=?, content=? ,modidate=now() where idx=? and passwd=?"; // id 값과 비밀번호를 조건절로 걸엇음
+            var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; // id 값과 비밀번호를 조건절로 걸엇음
+            console.log(content)
             connection.query(sQuery, datas, (err, result) => {
             if (err) console.error(err);
-            if(result.affectedRows == 0) //affectedRows  해당쿼리로 변경된수의 행 불러오기 0이면 업데이트 되지않으므로 비밀번호가 틀린것임
-                { res.send("<script>alert('비밀번호가 일치하지않습니다');history.back();</script>")
-                } 
-                else {
+            else {
                 res.redirect('/board/read/' + idx);
-                }
+            }
             connection.release();
         });
     })
     
-});
-
-app.get('/board/page/:page', (req, res) => { // 게시글 리스트에 :page가 추가된것임
-    var page = req.params.page; // 현재 페이지는 params 을 req 요청받아옴
-    pool.getConnection((err, connection) => {
-        if(err) throw err;
-        var sQuery =  "select idx, userid, title, date_format(modidate,'%Y-%m-%d %H:%i:%s') modidate, " +
-        "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard";  // select 구절 그대로
-
-        connection.query(sQuery, (err, rows) => {
-            if (err) throw err;
-            res.render('page', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid}); 
-            // length 데이터 전체넘버 랜더링,-1을 한이유는 db에서는1부터지만 for문에서는 0부터 시작 ,page_num: 한페이지에 보여줄 갯수
-            console.log(rows.length-1);
-        });
-        connection.release();
-    });
 });
 
 app.post('/board/delete', (req, res) => {
@@ -226,16 +223,15 @@ app.post('/board/delete', (req, res) => {
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
-        var sQuery = "delete from userboard where idx=? and passwd=?"; // 업데이트 수정과 거의 비슷한 쿼리문
-        connection.query(sQuery, datas, (err, result) => {
+            var sQuery = `DELETE from userboard where idx='${idx}'`; // 업데이트 수정과 거의 비슷한 쿼리문
+            connection.query(sQuery, datas, (err, result) => {
             if(err) throw err;
-            else if(result.affectedRows == 0){
-                res.send("<script>alert('패스워드가 일치하지 않습니다.');history.back();</script>");
-            } else {
-                res.redirect('/board/page');
+            else {
+                res.redirect('/board/page')
             }
+            connection.release();
         });
-        connection.release();
+       
     })
     
 });

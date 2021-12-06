@@ -4,36 +4,39 @@ html(lang="ko")
         title #{title}
     body
         h1 #{title}
-        form(action='/board/update' method='post')
-            table(border='1')
+        div
+            form(action='/board/update' method='post')
+                table(border='1')
+                    input(type='hidden' name='idx' value=rows.idx)
+                    tbody
+                        tr
+                            td 작성자
+                            td
+                                input#name(type='text' name='userid' value=rows.userid required='')
+                        tr
+                            td 제목
+                            td
+                                input#title(type='text' name='title' value=rows.title required='')
+                        tr
+                            td 내용
+                            td
+                                textarea#content(name='content' cols='30' rows='10' required='') #{rows.content}
+                        tr
+                            td 패스워드
+                            td
+                                input#passwd(type='password' name='passwd')
+                        tr
+                            td 변경일
+                            td #{rows.modidate}
+                        tr
+                            td 등록일
+                            td #{rows.regdate}
+                        tr
+                            td 조회수
+                            td #{rows.hit}
+                button(type='submit')  글 수정
+                span &nbsp&nbsp
+                a(href='/board/page') 목록
+            form(action='/board/delete' method = 'post')
                 input(type='hidden' name='idx' value=rows.idx)
-                tbody
-                    tr
-                        td 작성자
-                        td
-                            input#name(type='text' name='userid' value=rows.userid required='')
-                    tr
-                        td 제목
-                        td
-                            input#title(type='text' name='title' value=rows.title required='')
-                    tr
-                        td 내용
-                        td
-                            textarea#content(name='content' cols='30' rows='10' required='') #{rows.content}
-                    tr
-                        td 패스워드
-                        td
-                            input#passwd(type='password' name='passwd' required='')
-                    tr
-                        td 변경일
-                        td #{rows.modidate}
-                    tr
-                        td 등록일
-                        td #{rows.regdate}
-                    tr
-                        td 조회수
-                        td #{rows.hit}
-                    tr
-                        td(colspan='2')
-                            button(type='submit') 글 수정
-                            a(href='/board/list') 목록
+                button(type='submit')  글 삭제
