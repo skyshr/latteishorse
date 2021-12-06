@@ -180,6 +180,14 @@ app.post('/board/write', (req, res) => {
 
 app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로 받을거
     var idx = req.params.idx; // :idx 로 맵핑할 req 값을 가져온다
+    pool.getConnection((err, connection) =>{ //조회수 1씩 증가
+        if(err) throw err;
+        var sQuery = `UPDATE userboard set hit=hit+1 where idx='${idx}'`;
+        connection.query(sQuery,[idx], (err, rows) => {
+            if(err) throw err;
+        });
+        connection.release();
+    });
     pool.getConnection((err, connection) =>{
         if(err) throw err;
         var sQuery = "SELECT idx, userid, title, content, date_format(modidate, '%Y-%m-%d %H:%i:%s') modidate, " +   
@@ -204,7 +212,6 @@ app.post('/board/update', (req, res) => {
     pool.getConnection((err, connection) => {
         if(err) throw err;
             var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; // id 값과 비밀번호를 조건절로 걸엇음
-            console.log(content)
             connection.query(sQuery, datas, (err, result) => {
             if (err) console.error(err);
             else {
@@ -217,6 +224,7 @@ app.post('/board/update', (req, res) => {
 });
 
 app.post('/board/delete', (req, res) => {
+    console.log("delete")
     var idx = req.body.idx;
     var passwd = req.body.passwd;
     var datas = [idx, passwd];

@@ -4,7 +4,8 @@ html(lang="ko")
         title #{title}
     body 
         h1 #{title}
-        a(href='/') main 
+        a(href='/') main
+        span &nbsp&nbsp
         if(loginstate=='okay')
             a(href='/board/write') 글쓰기
         table(border='1')
