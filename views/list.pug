@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+    head
+        title #{title}
+    body 
+        h1 #{title}
+        a(href='/board/write') 글쓰기
+        table(border='1')
+            tbody
+                tr 
+                    td 번호
+                    td 작성자
+                    td 제목
+                    td 조회수
+                    td 수정일
+                    td 등록일
+                
+                -for(var i=0; i<rows.length; i++)
+                    tr 
+                        td #{rows[i].idx}
+                        td #{rows[i].name}
+                        td 
+                            a(href='/board/read/' + rows[i].idx) #{rows[i].title}
+                        td #{rows[i].hit}
+                        td #{rows[i].modidate}
+                        td #{rows[i].regdate}

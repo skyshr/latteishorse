@@ -1,0 +1,29 @@
+doctype html
+html
+	head
+		title 게시판 연습중
+	body
+		h1 이름
+		p  #{name}
+		h1 블로그
+		p #{blog}
+		h1 홈페이지
+		p #{homepage}
+		table(width='400')
+			tbody
+				tr
+					th 이름
+					td
+						input#name(type='text' name='name' size='10' maxlength='10')
+				tr
+					th 블로그
+					td
+						input#name(type='text' name='name' size='10' maxlength='10')
+				tr
+					th 홈페이지
+					td
+						input#name(type='text' name='name' size='10' maxlength='10')
+				tr
+					th 전송
+					td
+						input(type='submit')
