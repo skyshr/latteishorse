@@ -1,5 +1,5 @@
 doctype html
-head
+head(lang="ko")
   meta(charset='UTF-8')
   meta(http-equiv='X-UA-Compatible', content='IE=edge')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
@@ -13,13 +13,13 @@ header
         img(src='/img/main/Logo_03_999x451.png', style='width: 130px; height: 50px;')
     ul.nav_menu
       li
-        a(href='#') Home
+        a(href='/') Home
       li
         a(href='#') &#xCE90;&#xB9AD;&#xD130;DB
       li
         a(href='#') &#xCE90;&#xB9AD;&#xD130;&#xC2A4;&#xD0A8;
       li
-        a(href='/board/list') &#xCEE4;&#xBBA4;&#xB2C8;&#xD2F0;
+        a(href='/board/page') &#xCEE4;&#xBBA4;&#xB2C8;&#xD2F0;
     ul.nav_signUp
       if(!loginstate)
         li

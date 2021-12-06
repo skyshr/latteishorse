@@ -1,9 +1,12 @@
-html
+doctype html
+html(lang="ko")
     head
         title #{title}
     body 
         h1 #{title}
-        a(href='/board/write') 글쓰기
+        a(href='/') main 
+        if(loginstate=='okay')
+            a(href='/board/write') 글쓰기
         table(border='1')
             tbody
                 tr 
@@ -20,7 +23,7 @@ html
                     -else var data = rows[i]
                         tr
                             td #{i + 1}
-                            td #{data.name}
+                            td #{data.userid}
                             td
                                 a(href='/board/read/' + data.idx) #{data.title}
                             td #{data.hit}
@@ -29,4 +32,5 @@ html
                 tr
                     td(colspan='6')
                         -for (var j = 0; j < rows.length / page_num; j++) 
-                            a(href='/board/page/' + (j + 1)) &nbsp#{j+1}&nbsp
+                            a(href='/board/page/' + (j + 1)) #{j+1}
+                            span &nbsp&nbsp
