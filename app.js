@@ -133,7 +133,7 @@ app.listen(port, host, () => {
 // delete req.session.uid;
 // req.session.destory(function(err){});
 
-app.get('/board/page', (req, res) => {  // list/1 이 아니라  /list 로만 라우팅됫을때 /list/1 로 보내준다
+app.get('/board/page', (req, res) => {  // page/1 이 아니라  /page 로만 라우팅됫을때 /page/1 로 보내준다
     res.redirect('/board/page/1');
     console.log("==============");
     console.log(req.session.loginstate);
@@ -207,7 +207,7 @@ app.post('/board/update', (req, res) => {
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
-            var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; // id 값
+            var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; 
             connection.query(sQuery, datas, (err, result) => {
             if (err) console.error(err);
             else {
