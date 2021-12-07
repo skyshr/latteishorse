@@ -164,12 +164,11 @@ app.post('/board/write', (req, res) => {
     var userid= req.body.userid;                   
     var title = req.body.title;
     var content = req.body.content;
-    var passwd = req.body.passwd;
-    var datas = [userid, title, content, passwd]; // 모든데이터를 배열로 묶기
+    var datas = [userid, title, content]; // 모든데이터를 배열로 묶기
     // req 객체로 body 속성에서 input 파라미터 가져오기
     pool.getConnection((err, connection) =>{
         if(err) throw err;
-        var sQuery = "insert into userboard(userid, title, content, regdate, modidate, passwd,hit) values(?,?,?,now(),now(),?,0)";  // ? 는 매개변수
+        var sQuery = "insert into userboard(userid, title, content, regdate, modidate, hit) values(?,?,?,now(),now(),0)";  // ? 는 매개변수
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
             res.redirect('/board/page')
@@ -204,12 +203,11 @@ app.post('/board/update', (req, res) => {
     var userid = req.body.userid;
     var title = req.body.title;
     var content = req.body.content;
-    var passwd = req.body.passwd;
-    var datas = [idx, userid, title, content, passwd]; // 변수설정한 값을 datas 에 배열화
+    var datas = [idx, userid, title, content]; // 변수설정한 값을 datas 에 배열화
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
-            var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; // id 값과 비밀번호를 조건절로 걸엇음
+            var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; // id 값
             connection.query(sQuery, datas, (err, result) => {
             if (err) console.error(err);
             else {
