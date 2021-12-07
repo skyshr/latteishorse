@@ -148,7 +148,7 @@ app.get('/board/page/:page', (req, res) => { // 게시글 리스트에 :page가 
 
         connection.query(sQuery, (err, rows) => {
             if (err) throw err;
-            res.render('page', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid}); 
+            res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid}); 
             // length 데이터 전체넘버 랜더링,-1을 한이유는 db에서는1부터지만 for문에서는 0부터 시작 ,page_num: 한페이지에 보여줄 갯수
             console.log(rows.length-1);
         });

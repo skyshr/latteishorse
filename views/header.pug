@@ -4,13 +4,13 @@ nav.navbar
         img(src='/img/main/Logo_03_999x451.png', style='width: 130px; height: 50px;')
     ul.nav_menu
       li
-        form(action='', method='get')
+        form(action='/', method='get')
           input(type='submit', value='HOME')
+      //- li
+      //-   form(action='', method='get')
+      //-     input(type='submit', value='캐릭터DB')
       li
-        form(action='', method='get')
-          input(type='submit', value='캐릭터DB')
-      li
-        form(action='skinTrade', method='get')
+        form(action='/skinTrade', method='get')
           input(type='submit', value='캐릭터스킨')
       li
         form(action='/board/page', method='get')
