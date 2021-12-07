@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 
 // 스킨페이지테스트중
 app.get('/skinTrade', (req, res) => {
-    res.render('skinTrade'); 
+    res.render('garen'); 
 });
 
 app.post('/logout', (req, res) => {
