@@ -34,9 +34,11 @@ html(lang="ko")
                         tr
                             td 조회수
                             td #{rows.hit}
-                button(type='submit')  글 수정
-                span &nbsp&nbsp
-                a(href='/board/page') 목록
-            form(action='/board/delete' method = 'post')
-                input(type='hidden' name='idx' value=rows.idx)
-                button(type='submit')  글 삭제
+                div
+                    a(href='/board/page') 목록
+                if(loginstate=='okay')
+                    button(type='submit')  글 수정
+            if(loginstate=='okay')
+                form(action='/board/delete' method = 'post')
+                    input(type='hidden' name='idx' value=rows.idx)
+                    button(type='submit')  글 삭제
