@@ -388,3 +388,22 @@ app.post('/:name', (req, res) => {
     } 
 });
 
+// app.get('/mypage', (req, res) => {
+//     res.render('mypage');
+// });
+
+// app.get('/mypage/myboard', (req, res) => {
+//     var sQuery = `SELECT userid FROM userboard where userid='${req.session.uid}'`;
+
+//     pool.getConnection((err, connection) => {
+//         if(err) throw err;
+
+//         connection.query(sQuery, (err, rows) => {
+//             if(err) throw err;
+
+//             res.render('mypage', {title: '글 상세보기', rows:rows, loginstate: req.session.loginstate, id: req.session.uid});
+            
+//         });
+//         connection.release();
+//     })
+// })

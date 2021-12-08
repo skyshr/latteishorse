@@ -11,15 +11,37 @@ body(style="text-align : center")
     header 
         include ./header.pug
     main
-        h1 #{title}
+        h1 My page
         div 환영합니다 #{id} 소환사님
         br
-        form(action='/mypage/myboard' method='get')
-            input(type='submit' value='내가 작성한 글') 
-        br
-        br
-        form(action='/mypage/myskin' method='get')
-            input(type='submit' value='내 스킨')
-        br
-        br
-        button 회원정보수정
+        //- form(action='/mypage/myboard' method='get')
+        //-     input(type='submit' value='내가 작성한 글') 
+        //- br
+        //- br
+        //- form(action='/mypage/myskin' method='get')
+        //-     input(type='submit' value='내 스킨')
+        //- br
+        //- br
+        //- button 회원정보수정
+
+        //- table(border='1')
+        //-     input(type='hidden' name='idx' value=rows.idx)
+        //-     tbody
+        //-         tr
+        //-             td 제목
+        //-             td
+        //-                 input#title(type='text' name='title' value=rows.title required='')
+        //-         tr
+        //-             td 내용
+        //-             td
+        //-                 textarea#content(name='content' cols='30' rows='10' required='') #{rows.content}
+        //-         tr
+        //-             td 변경일
+        //-             td #{rows.modidate}
+        //-         tr
+        //-             td 등록일
+        //-             td #{rows.regdate}
+        //-         tr
+        //-             td 조회수
+        //-             td #{rows.hit}
+        //-         div
