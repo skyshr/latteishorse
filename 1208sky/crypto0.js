@@ -8,5 +8,3 @@ const hashed = crypto.createHmac('sha256', secret).update(password).digest('hex'
 
 console.log(hashed);
 console.log(hashed.length);
-
-const dehashed = crypto.publicDecrypt()
