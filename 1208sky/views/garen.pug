@@ -1,0 +1,74 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible', content='IE=edge')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  title Document
+  style.
+    .main-container {
+    background-color: aqua;
+    display: flex;
+    width: 1000px;
+    height: auto;
+    text-align: center;
+    margin: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 15%;
+    }
+    .content-container {
+    margin: auto;
+    padding: auto;
+    padding-bottom: 3%;
+    }
+    img {
+    width: 270px;
+    height: auto;
+    }
+    .liner {
+    width: 90%;
+    display: flex;
+    padding: auto;
+    padding-bottom: 1%;
+    }
+    .buy {
+    position: relative;
+    cursor: pointer;
+    font-weight: 500;
+    }
+    .btn-box {
+    position: relative;
+    left: 16%;
+    padding: auto;
+    margin: auto;
+    /* background-color: blue; */
+    }
+    .money-icon {
+    width: 13px;
+    height: auto;
+    padding-right: 1%;
+    }
+    #test {
+    margin-left: 8%;
+    }
+  script(type='module', src='./front.js')
+
+body  
+    .main-container
+        - for (let i=0; i<test.length; i++)
+            if (i%3==0)
+                .liner  
+                            
+            .content-container
+                .skin-container
+                    img(src= '/' + test[i].imgsrc)
+                .text-box #{test[i].skin}
+                .price
+                    .price
+                    img.money-icon(src='./money.png')
+                    span.test 20
+                form(action='/'+test[i].imgsrc, method='post')
+                    .btn-box
+                        input.buy(type='button', value='구매하기')
+                        
+        
