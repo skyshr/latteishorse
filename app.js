@@ -21,7 +21,7 @@ app.use(session({
     secure: false,
     secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie : {
         maxAge:(1000 * 60 * 30)
     },
@@ -46,8 +46,7 @@ app.get('/skinTrade', (req, res) => {
 app.post('/logout', (req, res) => {
     delete req.session.loginstate;
     delete req.session.uid;
-    res.send('<script>window.location.href = "/"; </script>'); 
-    console.log(req.session.loginstate)
+    res.send(`<script>window.location.href = "/"; </script>`);
 });
 
 app.get('/signup', (req, res) => {
@@ -158,7 +157,7 @@ app.get('/board/page/:page', (req, res) => { // 게시글 리스트에 :page가 
 
 app.get('/board/write', (req, res) => {  // board/write 로 접속하면 글쓰기페이지로 이동
     console.log(req.session.uid)
-    res.render('write', {title : "게시판 글쓰기", userid: req.session.uid})
+    res.render('write', {title : "게시판 글쓰기", loginstate:req.session.loginstate, id:req.session.uid})
 });
 
 app.post('/board/write', (req, res) => {
@@ -208,13 +207,25 @@ app.post('/board/update', (req, res) => {
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
-            var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; 
-            connection.query(sQuery, datas, (err, result) => {
-            if (err) console.error(err);
+        
+        var cQuery = `SELECT userid FROM userboard where idx='${idx}'`
+        connection.query(cQuery, (err, result) =>{
+            if(err) throw err;
+
+            console.log(result[0].userid);
+            if(userid == result[0].userid) {
+                var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; 
+                connection.query(sQuery, datas, (err, result) => {
+                    if (err) console.error(err);
+                    else {
+                        res.redirect('/board/read/' + idx);
+                    }
+                    connection.release();
+                });
+            } 
             else {
-                res.redirect('/board/read/' + idx);
+                res.send('<script>alert("작성자만 수정할 수 있습니다"); window.location.href = "/board/page"; </script>');
             }
-            connection.release();
         });
     })
     
@@ -222,21 +233,32 @@ app.post('/board/update', (req, res) => {
 
 app.post('/board/delete', (req, res) => {
     console.log("delete")
+    var userid = req.session.uid;
     var idx = req.body.idx;
     var passwd = req.body.passwd;
     var datas = [idx, passwd];
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
-            var sQuery = `DELETE from userboard where idx='${idx}'`; // 업데이트 수정과 거의 비슷한 쿼리문
-            connection.query(sQuery, datas, (err, result) => {
+
+        var cQuery = `SELECT userid FROM userboard where idx='${idx}'`
+        connection.query(cQuery, (err, result) =>{
             if(err) throw err;
-            else {
-                res.redirect('/board/page')
+
+            console.log(result[0].userid);
+            if(userid == result[0].userid) {
+                var sQuery = `DELETE from userboard where idx='${idx}'`; // 업데이트 수정과 거의 비슷한 쿼리문
+                    connection.query(sQuery, datas, (err, result) => {
+                    if(err) throw err;
+                    else {
+                        res.redirect('/board/page')
+                    }
+                    connection.release();
+                }); 
             }
-            connection.release();
+            else{
+                res.send('<script>alert("작성자만 삭제할 수 있습니다"); window.location.href = "/board/page"; </script>');
+            }
         });
-       
-    })
-    
+    });
 });
