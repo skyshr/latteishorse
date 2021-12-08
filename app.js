@@ -39,9 +39,9 @@ app.get('/', (req, res) => {
 });
 
 // 스킨페이지테스트중
-app.get('/skinTrade', (req, res) => {
-    res.render('garen'); 
-});
+// app.get('/skinTrade', (req, res) => {
+//     res.render('garen'); 
+// });
 
 // 마이페이지
 app.get('/mypage', (req, res) => {
@@ -267,3 +267,124 @@ app.post('/board/delete', (req, res) => {
         });
     });
 });
+
+
+//sky 추가
+
+const fsp = require('fs').promises;
+
+app.get('/all', async(req, res) => {
+    const data = await fsp.readFile('./all.json');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    return res.end(data);
+});
+
+app.get('/top', async(req, res) => {
+    const data = await fsp.readFile('./top.json');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    return res.end(data);
+});
+
+app.get('/mid', async(req, res) => {
+    const data = await fsp.readFile('./mid.json');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    return res.end(data);
+});
+
+app.get('/jng', async(req, res) => {
+    const data = await fsp.readFile('./jng.json');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    return res.end(data);
+});
+
+app.get('/adc', async(req, res) => {
+    const data = await fsp.readFile('./adc.json');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    return res.end(data);
+});
+
+app.get('/sup', async(req, res) => {
+    const data = await fsp.readFile('./sup.json');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    return res.end(data);
+});
+
+app.get('/:name', (req, res) => { //imagetest table있어야함
+    var tmp = req.params.name;
+    console.log(tmp);
+    const sql = `SELECT * FROM imagetest WHERE champid=("${tmp}")`;
+    const path = `skin/${tmp}/`
+    let skinName = [];
+    try {
+        mysql.getConnection((err, connection) => {
+            if(err) throw err;
+            
+            connection.query(sql, (err, result)=>{
+                console.log("connection success!");
+                if(err) throw err;
+                    // console.log("imgPath: " + imgPath);
+
+                connection.query(`SELECT * FROM skininfo WHERE imgsrc LIKE '%${tmp}%'`, (err, result) => {
+                    if (err) throw err;
+                    
+                    else {
+                        for (var element of result) {
+                            skinName.push({imgsrc : `${path}${element.imgsrc}`, skin: `${element.champid}`});
+                        }
+                        // console.log(result);
+                        // console.log(skinName);
+                        console.log(skinName);
+                        res.render('garen', {test: skinName});
+                    }
+                });
+            });
+            connection.release();
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.get('/skinTrade', (req, res) => {
+    res.render('test2');
+})
+
+app.post('/:name', (req, res) => { 
+    // console.log(req.params.name);
+    let tmp = req.params.name+'.jpg';
+    // console.log(tmp);
+    const sql = `SELECT * FROM skininfo WHERE imgsrc=("${tmp}")`;
+    let num = null;
+    try {
+        mysql.getConnection((err, connection) => {
+            if(err) throw err;
+            connection.query(sql, (err, result)=>{
+                if(err) throw err;
+                
+                num = String(result[0].seq);
+                connection.query(`SELECT * FROM userinfo WHERE userid=("${req.session.uid}")`, (err, result) => {
+                    let tmp = result[0].seq;
+                    if(!tmp.includes(num)){
+                        tmp+=`/${num}`
+                        connection.query(`UPDATE usertest SET seq = ("${tmp}") WHERE id="${req.session.id}"`, (err, result) => {
+                            if (err) throw err;
+                            else {
+                                res.send(`<script>alert("구매 완료 되었습니다.");
+                                window.location.href='/skin';</script>`);
+                            }
+                        });
+                    }
+                    else{
+                        res.send(`<script>alert("이미 보유한 스킨입니다");
+                        window.location.href='/skin';</script>`);
+                    }
+
+                })
+            });
+            connection.release();
+        });
+    } catch (err) {
+        console.log(err);
+    } 
+});
+
