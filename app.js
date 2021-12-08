@@ -309,11 +309,11 @@ app.get('/sup', async(req, res) => {
     return res.end(data);
 });
 
-app.get('/:name', (req, res) => { //imagetest table있어야함
+app.get('/skin/:name', (req, res) => { //imagetest table있어야함
     var tmp = req.params.name;
     console.log(tmp);
     const sql = `SELECT * FROM imagetest WHERE champid=("${tmp}")`;
-    const path = `skin/${tmp}/`
+    const path = `img/skin/${tmp}/`
     let skinName = [];
     try {
         mysql.getConnection((err, connection) => {
@@ -349,14 +349,14 @@ app.get('/skinTrade', (req, res) => {
     res.render('test2');
 })
 
-app.post('/:name', (req, res) => { 
+app.post('/skin/:name', (req, res) => { 
     // console.log(req.params.name);
     let tmp = req.params.name+'.jpg';
     // console.log(tmp);
     const sql = `SELECT * FROM skininfo WHERE imgsrc=("${tmp}")`;
     let num = null;
     try {
-        mysql.getConnection((err, connection) => {
+        pool.getConnection((err, connection) => {
             if(err) throw err;
             connection.query(sql, (err, result)=>{
                 if(err) throw err;

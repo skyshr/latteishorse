@@ -35,7 +35,7 @@ async function placeImg(line) {
             const contentDiv = document.createElement('div');
             const champimg = document.createElement('img');
             if(data[key]!="1") {
-                champimg.setAttribute('src', `./iconimg/${key}.png`);
+                champimg.setAttribute('src', `./img/iconimg/${key}.png`);
             }
             contentDiv.innerHTML = data[key];
 
@@ -45,7 +45,7 @@ async function placeImg(line) {
             box.appendChild(mainDiv);
             if (data[key]=="1") {
                 imgDiv.setAttribute('class', 't1');
-                champimg.setAttribute('src', './iconimg/Teemo.png');
+                champimg.setAttribute('src', './img/iconimg/Teemo.png');
             }
             mainDiv.setAttribute('class', 'test');
 

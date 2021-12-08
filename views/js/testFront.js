@@ -58,14 +58,14 @@ async function placeImg(line) {
             contentBox.setAttribute('class', 'content-box');
 
             if(data[key]!="1") {
-                img.setAttribute('src', `./iconimg/${key}.png`);
+                img.setAttribute('src', `./img/iconimg/${key}.png`);
                 form.setAttribute('class', 'form');
-                form.setAttribute('action', `/${key}`);
+                form.setAttribute('action', `/skin/${key}`);
                 img.setAttribute('class', 'imgicon');
             }
 
             else {
-                img.setAttribute('src', './iconimg/Teemo.png');
+                img.setAttribute('src', './img/iconimg/Teemo.png');
                 contentBox.setAttribute('class', 't1');
             }
 
