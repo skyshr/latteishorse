@@ -1,13 +1,13 @@
 // const mysql = require('./dbcon'); //여기서는 ./mysqlcon
 
 const fs = require('fs');
-var tmp = fs.readdirSync('./views/skin');
+var tmp = fs.readdirSync('./views/img/skin');
 
 //TABLE imagetest 생성 -> mysql 수정 후 데이터 삽입
 
 tmp.forEach(element => {
     let str = '';
-    let test = fs.readdirSync(`./views/skin/${element}`);
+    let test = fs.readdirSync(`./views/img/skin/${element}`);
     test.forEach(val => {
         str += val + '/';
     });
@@ -31,4 +31,5 @@ tmp.forEach(element => {
         console.log(err);
     } 
 });
+
 
