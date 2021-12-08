@@ -23,7 +23,8 @@ nav.navbar
           input(type='button' value='로그인' id='login')
       if(loginstate == "okay")
         li
-          input(type='button' value='마이페이지' id='mypage')
+          form(action='/mypage', method='get')
+            input(type='submit' value='마이페이지' id='mypage')
         li
           form(id="logoutbtn" action='/logout' method='POST')
             button#logoutBtn(type='submit') 로그아웃

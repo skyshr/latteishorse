@@ -43,6 +43,11 @@ app.get('/skinTrade', (req, res) => {
     res.render('garen'); 
 });
 
+// 마이페이지
+app.get('/mypage', (req, res) => {
+    res.render('mypage', {title:"마이페이지", loginstate:req.session.loginstate, id:req.session.uid}); 
+});
+
 app.post('/logout', (req, res) => {
     delete req.session.loginstate;
     delete req.session.uid;

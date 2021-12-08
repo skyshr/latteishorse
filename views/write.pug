@@ -5,6 +5,8 @@ head(lang="ko")
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
   title #{title}
   link(rel='stylesheet', href='/css/header.css', type='text/css')
+  link(rel='stylesheet', href='/css/table.css', type='text/css')
+
 body 
     header 
         include ./header.pug
@@ -19,11 +21,11 @@ body
                     tr
                         td 제목
                         td
-                            input#title(type='text' name='title' required='')
+                            input#title(type='text' name='title' required='' style='width:99%')
                     tr
                         td 내용
                         td
-                            textarea#content(name='content' cols='30' rows='10' required='')
+                            textarea#content(name='content' cols='30' rows='10' required='' style='width:99%')
                     tr
                         td(colspan='2')
                             button(type='submit') 글쓰기
