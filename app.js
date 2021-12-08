@@ -157,11 +157,12 @@ app.get('/board/page/:page', (req, res) => { // 게시글 리스트에 :page가 
 });
 
 app.get('/board/write', (req, res) => {  // board/write 로 접속하면 글쓰기페이지로 이동
-    res.render('write', {title : "게시판 글쓰기"})
+    console.log(req.session.uid)
+    res.render('write', {title : "게시판 글쓰기", userid: req.session.uid})
 });
 
 app.post('/board/write', (req, res) => {
-    var userid= req.body.userid;                   
+    var userid= req.session.uid;                   
     var title = req.body.title;
     var content = req.body.content;
     var passwd = req.body.passwd;
@@ -172,7 +173,7 @@ app.post('/board/write', (req, res) => {
         var sQuery = "insert into userboard(userid, title, content, regdate, modidate, passwd,hit) values(?,?,?,now(),now(),?,0)";  // ? 는 매개변수
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
-            res.redirect('/board/page')
+            res.redirect('/board/page');
         })
         connection.release();
     });
@@ -201,7 +202,7 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
 app.post('/board/update', (req, res) => {
     console.log("update")
     var idx = req.body.idx;
-    var userid = req.body.userid;
+    var userid = req.session.uid;
     var title = req.body.title;
     var content = req.body.content;
     var passwd = req.body.passwd;
