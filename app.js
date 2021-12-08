@@ -133,7 +133,7 @@ app.listen(port, host, () => {
 // delete req.session.uid;
 // req.session.destory(function(err){});
 
-app.get('/board/page', (req, res) => {  // list/1 이 아니라  /list 로만 라우팅됫을때 /list/1 로 보내준다
+app.get('/board/page', (req, res) => {  // page/1 이 아니라  /page 로만 라우팅됫을때 /page/1 로 보내준다
     res.redirect('/board/page/1');
     console.log("==============");
     console.log(req.session.loginstate);
@@ -148,7 +148,7 @@ app.get('/board/page/:page', (req, res) => { // 게시글 리스트에 :page가 
 
         connection.query(sQuery, (err, rows) => {
             if (err) throw err;
-            res.render('page', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid}); 
+            res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid}); 
             // length 데이터 전체넘버 랜더링,-1을 한이유는 db에서는1부터지만 for문에서는 0부터 시작 ,page_num: 한페이지에 보여줄 갯수
             console.log(rows.length-1);
         });
@@ -165,12 +165,11 @@ app.post('/board/write', (req, res) => {
     var userid= req.session.uid;                   
     var title = req.body.title;
     var content = req.body.content;
-    var passwd = req.body.passwd;
-    var datas = [userid, title, content, passwd]; // 모든데이터를 배열로 묶기
+    var datas = [userid, title, content]; // 모든데이터를 배열로 묶기
     // req 객체로 body 속성에서 input 파라미터 가져오기
     pool.getConnection((err, connection) =>{
         if(err) throw err;
-        var sQuery = "insert into userboard(userid, title, content, regdate, modidate, passwd,hit) values(?,?,?,now(),now(),?,0)";  // ? 는 매개변수
+        var sQuery = "insert into userboard(userid, title, content, regdate, modidate, hit) values(?,?,?,now(),now(),0)";  // ? 는 매개변수
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
             res.redirect('/board/page');
@@ -205,12 +204,11 @@ app.post('/board/update', (req, res) => {
     var userid = req.session.uid;
     var title = req.body.title;
     var content = req.body.content;
-    var passwd = req.body.passwd;
-    var datas = [idx, userid, title, content, passwd]; // 변수설정한 값을 datas 에 배열화
+    var datas = [idx, userid, title, content]; // 변수설정한 값을 datas 에 배열화
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
-            var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; // id 값과 비밀번호를 조건절로 걸엇음
+            var sQuery = `UPDATE userboard set userid='${userid}', title='${title}', content='${content}' ,modidate=now()  where idx='${idx}'`; 
             connection.query(sQuery, datas, (err, result) => {
             if (err) console.error(err);
             else {

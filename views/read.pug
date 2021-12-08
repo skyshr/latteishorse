@@ -1,8 +1,14 @@
 doctype html
-html(lang="ko")
-    head
-        title #{title}
-    body
+head(lang="ko")
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible', content='IE=edge')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  title #{title}
+  link(rel='stylesheet', href='/css/header.css', type='text/css')
+body 
+    header 
+        include ./header.pug
+    main
         h1 #{title}
         div
             form(action='/board/update' method='post')
@@ -20,10 +26,6 @@ html(lang="ko")
                             td 내용
                             td
                                 textarea#content(name='content' cols='30' rows='10' required='') #{rows.content}
-                        tr
-                            td 패스워드
-                            td
-                                input#passwd(type='password' name='passwd')
                         tr
                             td 변경일
                             td #{rows.modidate}
