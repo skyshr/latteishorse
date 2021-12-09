@@ -3,11 +3,11 @@ USE apptestdb;
 
 create TABLE userinfo (
     userid varchar(32) not null PRIMARY KEY,
-    userpwd varchar(32) not null,
+    userpassword varchar(32) not null,
     username varchar(16) not null,
     useremail varchar(64) not null,
-    useraddr varchar(64) not null,
-    useraddrdet varchar(64) not null,
+    useraddress varchar(64) not null,
+    useraddressdet varchar(64) not null,
     userpoint int not null,
     champseq varchar(20000) default ""
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
