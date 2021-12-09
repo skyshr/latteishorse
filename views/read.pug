@@ -39,7 +39,8 @@ body
 
                 div
                     a(href='/board/page') 목록
-                if(loginstate=='okay')
+            if(loginstate=='okay')
+                form(action='/board/rewrite', method='get')
                     button(type='submit')  글 수정
             br
             br
