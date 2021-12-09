@@ -1,7 +1,7 @@
 {
     "host": "localhost",
     "user": "root",
-    "password": "85354351",
+    "password": "root",
     "database": "APPTESTDB",
     "connectionLimit": 10
 }

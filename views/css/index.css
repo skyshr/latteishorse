@@ -1,4 +1,7 @@
-
+:root {
+  --navText-color: rgb(226, 164, 71);
+  --leftPopup-color: rgba(70, 70, 70, 0.61);
+}
 
 /* html{overflow: hidden;} */
 html,body { 
