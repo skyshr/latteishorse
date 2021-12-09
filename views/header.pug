@@ -13,10 +13,16 @@ nav.navbar
       form(action='/board/page', method='get')
         input.navBarMenuBtn(type='submit', value='커뮤니티')
   ul.nav_signUp
-    li
-      input#signup.navBarSignBtn(type='button', value='회원가입')
-    li
-      input#login.navBarSignBtn(type='button', value='로그인')
+    if(!loginstate)
+      li
+        input#signup.navBarSignBtn(type='button', value='회원가입')
+      li
+        input#login.navBarSignBtn(type='button', value='로그인')
+    if(loginstate == "okay")
+      li
+        input#mypage.navBarSignBtn(type='button', value='마이페이지')
+      li
+        input#logoutbtn.navBarSignBtn(type='button', value='로그아웃')
   .nav_toggleBtn
     .line1
     .line2
