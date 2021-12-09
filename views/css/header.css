@@ -43,10 +43,10 @@ main {
   padding: 8px 12px;
 }
 
-.nav_menu li:hover {
+/* .nav_menu li:hover {
   background-color: rgba(145, 134, 134, 0.199);
   border-radius: 4px;
-}
+} */
 .nav_signUp {
   list-style: none;
   display: flex;
@@ -114,4 +114,34 @@ main {
   .nav_signUp.active {
     display: flex;
   }
+}
+
+.navBarMenuBtn {
+  /* background-color: var(--navText-color); */
+  background-color: rgba(128, 128, 128, 0);
+  /* border-radius: 10px; */
+  color: var(--navText-color);
+  font-size: 100%;
+  font-weight: 800;
+  width: 120px;
+  height: 27px;
+  border: none;
+}
+.navBarSignBtn {
+  /* background-color: var(--navText-color); */
+  background-color: rgba(0, 0, 0, 0);
+  /* border-radius: 10px; */
+  color: var(--navText-color);
+  font-size: 100%;
+  font-weight: 550;
+  width: 120px;
+  height: 27px;
+  border: none;
+}
+
+.navBarMenuBtn:hover {
+  border-bottom: 3px solid rgba(255, 187, 0, 0.699);;
+}
+.navBarSignBtn:hover {
+  border-bottom: 3px solid rgba(255, 187, 0, 0.699);;
 }

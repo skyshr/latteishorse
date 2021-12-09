@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="stylesheet" type="text/css" href="./css/signupLoginPopup.css">
+</head>
+
+<body>
+    <div class="signupPopupContainer">
+        <div class="signupPopupBox">
+            <form action="login" method="POST">
+                <div>
+                    <div class="mainTitle" style="margin-top: 25px;">
+                        로그인
+                    </div>
+                    <div class="signupInputBox loginMarginTop">
+                        <div class="signupSubTitle">
+                            <label for="userid">ID : </label>
+                        </div>
+                        <div class="signupInput">
+                            <input id="userid" name="id" require placeholder="ID를 입력하세요">
+                        </div>
+                    </div>
+                    <div class="signupInputBox loginMarginTop">
+                        <div class="signupSubTitle">
+                            <label for="pwd">비밀번호 : </label>
+                        </div>  
+                        <div class="signupInput">
+                            <input id="pwd" name="pwd" type="password" require placeholder="비밀번호를 입력하세요"></div>
+                        </div>
+                    </div>
+                    <div class="signUpBtnBox loginMarginTop">
+                            <button class="signUpBtn" id="logInBtn" type="submit">로그인</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
