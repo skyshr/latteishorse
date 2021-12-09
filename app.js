@@ -367,8 +367,10 @@ app.get('/skinTrade', (req, res) => {
 
 app.post('/skin/:name', (req, res) => { 
     // console.log(req.params.name);
+    // console.log('userid: ' + req.session.uid);
+    console.log("post");
     let tmp = req.params.name+'.jpg';
-    // console.log(tmp);
+    
     const sql = `SELECT * FROM skininfo WHERE imgsrc=("${tmp}")`;
     let num = null;
     try {
@@ -376,24 +378,26 @@ app.post('/skin/:name', (req, res) => {
             if(err) throw err;
             connection.query(sql, (err, result)=>{
                 if(err) throw err;
+                let point = result[0].cpoint;
                 
                 num = String(result[0].seq);
                 connection.query(`SELECT * FROM userinfo WHERE userid=("${req.session.uid}")`, (err, result) => {
-                    let tmp = result[0].seq;
+                    if (err) throw err;
+                    let tmp = result[0].champseq;
                     let money = result[0].userpoint;
                     if(tmp==undefined || !tmp.includes(num)){
                         if (money>point) {
                             tmp+=`/${num}`
                             money-=point;
-                            connection.query(`UPDATE userinfo SET champseq = ("${tmp}"), userpoint = ("${money}") WHERE id="${req.session.id}"`, (err, result) => {
+                            connection.query(`UPDATE userinfo SET champseq = ("${tmp}"), userpoint = ("${money}") WHERE userid="${req.session.uid}"`, (err, result) => {
                                 if (err) throw err;
                                 else {
+                                    console.log(result);
                                     res.send(`<script>alert("구매 완료 되었습니다.");
                                     window.location.href='/';</script>`);
                                 }
                             });
                         }
-                        
                         else {
                             res.send(`<script>alert("포인트가 부족합니다.")</script>`)
                         }
@@ -402,6 +406,7 @@ app.post('/skin/:name', (req, res) => {
                         res.send(`<script>alert("이미 보유한 스킨입니다");
                         window.location.href='/';</script>`);
                     }
+
                 })
             });
             connection.release();

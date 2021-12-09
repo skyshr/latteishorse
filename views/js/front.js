@@ -4,6 +4,8 @@
 var btn = document.querySelectorAll('.buy');
 var price = document.querySelectorAll('.test');
 
+console.log("btn length: " + btn.length);
+
 function make() {
     let currentPoint = 100;
     if (localStorage.getItem('point')) currentPoint = Number(localStorage.getItem('point'));
@@ -12,7 +14,6 @@ function make() {
     for (let element=0; element< btn.length; element++) {
         let btnBox = document.querySelectorAll('.btn-box');
         let p = price[element].innerHTML;
-        let check = btnBox[element].querySelector('.test');
         // console.log(check);
 
         if (p > currentPoint) {
@@ -51,7 +52,7 @@ function make() {
                 let tmp = confirm(`${p} 포인트가 차감됩니다.
 정말 진행하시겠습니까?`);
                 if (tmp) {
-                    document.querySelectorAll('form')[element].submit();
+                    document.querySelectorAll('.form')[element].submit();
                 }
             }
             
