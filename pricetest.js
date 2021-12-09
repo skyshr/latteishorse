@@ -79,12 +79,15 @@ function price(){
     fs.writeFileSync(dataPath, JSON.stringify(dataArr));
     console.log("written file!");
 }
-price();
+// price();
 
 //밑에는 위에 price함수 실행하여 price.json파일 생성 후 실행
-var priceFile = JSON.parse(fs1.readFileSync('price.json'));
+var priceFile = JSON.parse(fs.readFileSync('price.json'));
 
-var connection = new mysql1({
+const mysql = require('sync-mysql');
+var dbconfig = require('./mydbsql.json');
+
+var connection = new mysql({
     host: dbconfig.host,
     user: dbconfig.user,
     password: dbconfig.password,
