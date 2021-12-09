@@ -9,13 +9,13 @@ toggleBtn.addEventListener('click', () => {
 
 document.getElementById("login").addEventListener("click", function(){
     var signUpWindow;
-    var popupX= (document.body.offsetWidth / 2) - (570 / 2);
+    var popupX= (document.body.offsetWidth / 2) - (520 / 2);
     var popupY= (window.screen.height / 2) - (350 / 2); 
-    signUpWindow = window.open("/login", "logInForm", "width=570, height=350, left = "+ popupX + ", top= "+ popupY + "resizable = no, scrollbars = no");
+    signUpWindow = window.open("/login", "logInForm", "width=520, height=350, left = "+ popupX + ", top= "+ popupY + "resizable = no, scrollbars = no");
 });
 document.getElementById("signup").addEventListener("click", function(){
     var logInWindow;
-    var popupX= (document.body.offsetWidth / 2) - (570 / 2);
-    var popupY= (window.screen.height / 2) - (350 / 2); 
-    logInWindow = window.open("/signup", "signupForm", "width=570, height=350, left = "+ popupX + ", top= "+ popupY + "resizable = no, scrollbars = no");
+    var popupX= (document.body.offsetWidth / 2) - (520 / 2);
+    var popupY= (window.screen.height / 2) - (440 / 2); 
+    logInWindow = window.open("/signup", "signupForm", "width=520, height=440, left = "+ popupX + ", top= "+ popupY + "resizable = no, scrollbars = no");
 });
