@@ -7,10 +7,16 @@ var price = document.querySelectorAll('.test');
 console.log("btn length: " + btn.length);
 
 function make() {
-    let currentPoint = 100;
-    if (localStorage.getItem('point')) currentPoint = Number(localStorage.getItem('point'));
-    console.log(Number(localStorage.getItem('point')));
-    console.log(currentPoint);
+    // let currentPoint = 100;
+    // if (localStorage.getItem('point')) currentPoint = Number(localStorage.getItem('point'));
+    // console.log(Number(localStorage.getItem('point')));
+    // console.log(currentPoint);
+    let data = document.querySelector('.infoBoxUserPoint').innerHTML;
+    console.log('data:' + data);
+    console.log(data.split(':')[1].split('<')[0]);
+    let currentPoint = Number((data.split(':')[1].split('<')[0]).replace(' ',''));
+    console.log("currentPoint: " + currentPoint);
+    console.log(typeof(currentPoint));
     for (let element=0; element< btn.length; element++) {
         let btnBox = document.querySelectorAll('.btn-box');
         let p = price[element].innerHTML;
