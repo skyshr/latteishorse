@@ -33,6 +33,7 @@ const port = 3000;
 const pool = require("./mysqlcon");
 
 app.get('/', (req, res) => {
+<<<<<<< HEAD
     if (req.session.uid==undefined) {
         let dataPrim =null;
         return res.render('index', {loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim});
@@ -56,6 +57,12 @@ app.get('/', (req, res) => {
     // res.render('index', {loginstate:req.session.loginstate, id:req.session.uid}); 
     // console.log("loginstate: " + req.session.loginstate);
     // console.log("session uid: " + req.session.uid);
+=======
+    res.render('index', {loginstate:req.session.loginstate, id:req.session.uid, userpoint:req.session.userpoint}); 
+    console.log(req.session.loginstate);
+    console.log(req.session.uid);
+    console.log(req.session.userpoint);
+>>>>>>> b815abcf2ccb248b5149500a9410aeaff41616ed
 });
 
 // 스킨페이지테스트중
@@ -137,6 +144,8 @@ app.get('/mypage', (req, res) => {
 app.post('/logout', (req, res) => {
     delete req.session.loginstate;
     delete req.session.uid;
+    delete req.session.userpoint;
+    delete req.session.idx;
     res.send(`<script>window.location.href = "/"; </script>`);
 });
 
@@ -181,7 +190,7 @@ app.post('/login', (req, res) => {
     pool.getConnection((err, connection) => {
         if(err) throw err;
 
-        var sQuery = `SELECT userid, userpassword FROM userinfo where userid='${req.body.id}'`;
+        var sQuery = `SELECT userid, userpassword, userpoint FROM userinfo where userid='${req.body.id}'`;
         console.log(sQuery);
         
         connection.query(sQuery, (err, result, fields) => {
@@ -198,6 +207,7 @@ app.post('/login', (req, res) => {
                     console.log("로그인 성공");
                     req.session.loginstate = 'okay';
                     req.session.uid = result[0].userid;
+                    req.session.userpoint = result[0].userpoint;
                     connection.release();
                     res.send("<script>alert('환영합니다!');opener.parent.location.reload();window.close();</script>");
                     console.log(req.session.loginstate);
@@ -296,6 +306,7 @@ app.post('/board/write', (req, res) => {
 
 app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로 받을거
     var idx = req.params.idx; // :idx 로 맵핑할 req 값을 가져온다
+    req.session.idx = idx;
     pool.getConnection((err, connection) =>{ //조회수 1씩 증가
         if(err) throw err;
         var hQuery = `UPDATE userboard set hit=hit+1 where idx='${idx}'`;
@@ -392,14 +403,15 @@ app.post('/board/delete', (req, res) => {
     });
 });
 
-app.get('/board/rewrite/:idx', (req, res) => { // board/read/idx숫자 형식으로 받을거
-    var idx = req.params.idx; // :idx 로 맵핑할 req 값을 가져온다
-    pool.getConnection((err, connection) =>{ //조회수 1씩 증가
+app.get('/board/rewrite', (req, res) => { 
+    var idx = req.session.idx; 
+    pool.getConnection((err, connection) =>{ 
         if(err) throw err;
 
         // if(err) throw err;
         var sQuery = "SELECT idx, userid, title, content, date_format(modidate, '%Y-%m-%d %H:%i:%s') modidate, " +   
         "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard where idx=?";
+
         connection.query(sQuery,[idx], (err, rows) => {  // 한개의 글만조회하기때문에 마지막idx에 매개변수를 받는다
             if(err) throw err;
             
@@ -407,11 +419,18 @@ app.get('/board/rewrite/:idx', (req, res) => { // board/read/idx숫자 형식으
             let point = result[0].userpoint;
             let dataPrim = {id: id, point: point};
             connection.release();
-            return res.render('read', {title : '글 수정/삭제', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim})
+            return res.render('rewrite', {title : '글 수정/삭제', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim})
             
             // res.render('read', {title : '글 수정/삭제', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid}); // 첫번째행 한개의데이터만 랜더링 요청
         });
     // connection.release();
+//         connection.query(sQuery,[idx], (err, rows) => {  
+//             if(err) throw err;
+        
+//             res.render('rewrite', {title : '글 수정/삭제', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid});
+//         });
+//         connection.release();
+
     });
 });
 
