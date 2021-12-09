@@ -29,3 +29,16 @@ create table userboard (
 
 select * from userboard;
 -- drop table userboard;
+
+create table commentboard (
+	idx int not null auto_increment PRIMARY KEY, 
+    userid varchar(256) null,
+    comments varchar(256) null,
+    likecnt varchar(256) null,
+    board_idx int,
+    foreign key (board_idx) references userboard(idx) 
+    on update cascade on delete cascade
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+select * from commentboard;
+-- drop table commentboard;

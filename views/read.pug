@@ -44,8 +44,26 @@ body
             br
             br
             div
-                form(action="/board/comment")
-                    input(type="text")
-                    button(type="submit") 댓글 달기
+                if(loginstate=='okay')
+                    form(action="/board/comment" method = "post")
+                        input(type='hidden' name='idx' value=rows.idx)
+                        input#comment(name ="comment" type="text" required='')
+                        button(type="submit") 댓글 달기
+                if(!loginstate)
+                    
+                    input(value ="로그인 후 댓글을 달 수 있습니다" style="text-align:center; width:40%;" readonly )
 
             div#commentlist
+                if(comrows.length>0)
+                    table(border=1)
+                        input(type='hidden' name='idx' value=comrows.idx)
+                        tbody
+                            td 작성자
+                            td 내용
+                            td 좋아요 수
+                            -for(var i = 0; i<comrows.length; i++)
+                                -var data = comrows[i]
+                                tr
+                                    td #{data.userid}
+                                    td #{data.comments}
+                                    td #{data.likecnt}
