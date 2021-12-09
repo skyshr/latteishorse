@@ -33,7 +33,7 @@ const port = 3000;
 const pool = require("./mysqlcon");
 
 app.get('/', (req, res) => {
-<<<<<<< HEAD
+// <<<<<<< HEAD
     if (req.session.uid==undefined) {
         let dataPrim =null;
         return res.render('index', {loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim});
@@ -57,12 +57,12 @@ app.get('/', (req, res) => {
     // res.render('index', {loginstate:req.session.loginstate, id:req.session.uid}); 
     // console.log("loginstate: " + req.session.loginstate);
     // console.log("session uid: " + req.session.uid);
-=======
-    res.render('index', {loginstate:req.session.loginstate, id:req.session.uid, userpoint:req.session.userpoint}); 
-    console.log(req.session.loginstate);
-    console.log(req.session.uid);
-    console.log(req.session.userpoint);
->>>>>>> b815abcf2ccb248b5149500a9410aeaff41616ed
+// =======
+//     res.render('index', {loginstate:req.session.loginstate, id:req.session.uid, userpoint:req.session.userpoint}); 
+//     console.log(req.session.loginstate);
+//     console.log(req.session.uid);
+//     console.log(req.session.userpoint);
+// >>>>>>> b815abcf2ccb248b5149500a9410aeaff41616ed
 });
 
 // 스킨페이지테스트중
