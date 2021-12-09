@@ -196,10 +196,8 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
             res.render('read', {title : '글 상세보기', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid}); // 첫번째행 한개의데이터만 랜더링 요청
         });
         connection.release();
-        
         });
     });
-        
 });
 
 app.post('/board/update', (req, res) => {
@@ -268,6 +266,22 @@ app.post('/board/delete', (req, res) => {
     });
 });
 
+app.get('/board/rewrite/:idx', (req, res) => { // board/read/idx숫자 형식으로 받을거
+    var idx = req.params.idx; // :idx 로 맵핑할 req 값을 가져온다
+    pool.getConnection((err, connection) =>{ //조회수 1씩 증가
+        if(err) throw err;
+
+        if(err) throw err;
+        var sQuery = "SELECT idx, userid, title, content, date_format(modidate, '%Y-%m-%d %H:%i:%s') modidate, " +   
+        "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard where idx=?";
+        connection.query(sQuery,[idx], (err, rows) => {  // 한개의 글만조회하기때문에 마지막idx에 매개변수를 받는다
+        if(err) throw err;
+        
+        res.render('read', {title : '글 수정/삭제', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid}); // 첫번째행 한개의데이터만 랜더링 요청
+        });
+    connection.release();
+    });
+});
 
 //sky 추가
 

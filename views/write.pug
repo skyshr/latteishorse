@@ -15,9 +15,9 @@ body
         form(action='/board/write' method='post')
             table(border='1')
                 tbody
-                    tr
+                    tr(style)
                         td 작성자
-                        td #{userid}
+                        td #{id}
                     tr
                         td 제목
                         td
@@ -25,7 +25,9 @@ body
                     tr
                         td 내용
                         td
-                            textarea#content(name='content' cols='30' rows='10' required='' style='width:99%')
+                            textarea#content(name='content' cols='30' rows='10' required='' style='width:99%; resize:none')
                     tr
                         td(colspan='2')
                             button(type='submit') 글쓰기
+
+            
