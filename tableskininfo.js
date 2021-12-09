@@ -1,5 +1,5 @@
 const mysql = require('sync-mysql');
-var dbconfig = require('./dbconfig.json');
+var dbconfig = require('./mydbsql.json');
 const fs = require('fs');
 
 var connection = new mysql({
@@ -13,7 +13,7 @@ var tmp = JSON.parse(fs.readFileSync('./skin.json'));
 
 for (var element of tmp) {
     for (var key in element) {
-        var query = `INSERT INTO test (champid, imgsrc) VALUES ("${element[key]}", "${key}")`;
+        var query = `INSERT INTO skininfo (champid, imgsrc) VALUES ("${element[key]}", "${key}")`;
         connection.query(query);
     }
 }

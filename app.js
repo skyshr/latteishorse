@@ -316,7 +316,7 @@ app.get('/skin/:name', (req, res) => { //imagetest table있어야함
     const path = `img/skin/${tmp}/`
     let skinName = [];
     try {
-        mysql.getConnection((err, connection) => {
+        pool.getConnection((err, connection) => {
             if(err) throw err;
             
             connection.query(sql, (err, result)=>{
@@ -329,7 +329,7 @@ app.get('/skin/:name', (req, res) => { //imagetest table있어야함
                     
                     else {
                         for (var element of result) {
-                            skinName.push({imgsrc : `${path}${element.imgsrc}`, skin: `${element.champid}`});
+                            skinName.push({imgsrc : `${path}${element.imgsrc}`, skin: `${element.champid}`, money: `${element.cpoint}`});
                         }
                         // console.log(result);
                         // console.log(skinName);

@@ -1,4 +1,4 @@
-// const mysql = require('./dbcon'); //여기서는 ./mysqlcon
+const mysql = require('./mysqlcon'); //여기서는 ./mysqlcon
 
 const fs = require('fs');
 var tmp = fs.readdirSync('./views/img/skin');

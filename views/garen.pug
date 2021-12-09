@@ -66,7 +66,7 @@ body
                 .price
                     .price
                     img.money-icon(src='./money.png')
-                    span.test 20
+                    span.test #{test[i].money}
                 form(action='/'+test[i].imgsrc, method='post')
                     .btn-box
                         input.buy(type='button', value='구매하기')
