@@ -32,7 +32,6 @@ head
     }
     a {
     margin: auto;
-    background-color: turquoise;
     }
     .test {
     margin: auto;
@@ -52,9 +51,12 @@ head
     cursor: pointer;
     }
   link(rel='stylesheet', href='/css/header.css', type='text/css')
+  link(rel='stylesheet', href='/css/infoBox.css', type='text/css')
 
 header 
   include ./header.pug
+
+include ./infoBox.pug
 .champion
   .line_seperator
     form(action='/', method='get')

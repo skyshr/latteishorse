@@ -33,9 +33,29 @@ const port = 3000;
 const pool = require("./mysqlcon");
 
 app.get('/', (req, res) => {
-    res.render('index', {loginstate:req.session.loginstate, id:req.session.uid}); 
-    console.log(req.session.loginstate);
-    console.log(req.session.uid);
+    if (req.session.uid==undefined) {
+        let dataPrim =null;
+        return res.render('index', {loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim});
+    }
+    try {
+        pool.getConnection((err, connection) => {
+            connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
+                if (err) throw err;
+                
+                let id = result[0].userid;
+                let point = result[0].userpoint;
+                let dataPrim = {id: id, point: point};
+                res.render('index', {loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim});
+                connection.release();
+            });
+        })
+    } catch (err) {
+        if (err) throw err;
+        connection.release();
+    }
+    // res.render('index', {loginstate:req.session.loginstate, id:req.session.uid}); 
+    // console.log("loginstate: " + req.session.loginstate);
+    // console.log("session uid: " + req.session.uid);
 });
 
 // 스킨페이지테스트중
@@ -57,6 +77,11 @@ app.get('/mypage', (req, res) => {
             connection.query(`SELECT champseq FROM userinfo where userid="${req.session.uid}"`, (err, result)=> {
                 if (err) throw err;
                 let tmp =result[0].champseq.split('/');
+                if (tmp.length==1) {
+                    let imgsrc = null;
+                    connection.release();
+                    return res.render('mypage', {title:"마이페이지", imgsrc: imgsrc, rows:rows, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
+                }
                 let imgsrc = []
                 console.log(tmp);
                 tmp.forEach(val => {
@@ -142,7 +167,7 @@ app.post('/signup', (req, res) => {
                     console.log(result); 
                 });
                 connection.release();
-                res.send("<script>window.close();</script>");
+                res.send("<script>alert('회원가입이 완료되었습니다.'); window.close();</script>");
             };
         });
     });
@@ -213,17 +238,43 @@ app.get('/board/page/:page', (req, res) => { // 게시글 리스트에 :page가 
 
         connection.query(sQuery, (err, rows) => {
             if (err) throw err;
-            res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid}); 
+            if (req.session.uid==null) {
+                let dataPrim = null;
+                connection.release();
+                return res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim}); 
+            }
+            connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
+                if (err) throw err;
+                
+                let id = result[0].userid;
+                let point = result[0].userpoint;
+                let dataPrim = {id: id, point: point};
+                connection.release();
+                return res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim}); 
+            })
+            // res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid}); 
             // length 데이터 전체넘버 랜더링,-1을 한이유는 db에서는1부터지만 for문에서는 0부터 시작 ,page_num: 한페이지에 보여줄 갯수
-            console.log(rows.length-1);
+            // console.log(rows.length-1);
         });
-        connection.release();
+        // connection.release();
     });
 });
 
 app.get('/board/write', (req, res) => {  // board/write 로 접속하면 글쓰기페이지로 이동
     console.log(req.session.uid)
-    res.render('write', {title : "게시판 글쓰기", loginstate:req.session.loginstate, id:req.session.uid})
+    pool.getConnection((err, connection) =>{
+        if(err) throw err;
+        connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
+            if (err) throw err;
+            
+            let id = result[0].userid;
+            let point = result[0].userpoint;
+            let dataPrim = {id: id, point: point};
+            connection.release();
+            return res.render('write', {title : "게시판 글쓰기", loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim});
+        })
+    })
+    // res.render('write', {title : "게시판 글쓰기", loginstate:req.session.loginstate, id:req.session.uid})
 });
 
 app.post('/board/write', (req, res) => {
@@ -257,11 +308,20 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
                 var cQuery = "SELECT idx, userid, comments, likecnt from commentboard where board_idx=?";
                 connection.query(cQuery,[idx], (err, comrows) => {
                     if(err) throw err;
-                    res.render('read', {title : '글 상세보기', rows:rows[0], comrows:comrows, loginstate:req.session.loginstate, id:req.session.uid}); // 첫번째행 한개의데이터만 랜더링 요청
+                    connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
+                        if (err) throw err;
+                        
+                        let id = result[0].userid;
+                        let point = result[0].userpoint;
+                        let dataPrim = {id: id, point: point};
+                        connection.release();
+                        return res.render('read', {title : '글 상세보기', rows:rows[0], comrows:comrows, loginstate:req.session.loginstate, id:req.session.uid, dataPrim:dataPrim}); // 첫번째행 한개의데이터만 랜더링 요청
+                    })
+                })
+                    // res.render('read', {title : '글 상세보기', rows:rows[0], comrows:comrows, loginstate:req.session.loginstate, id:req.session.uid}); // 첫번째행 한개의데이터만 랜더링 요청
             })
             
-        });
-        connection.release();
+        // connection.release();
         });
     });
 });
@@ -337,15 +397,21 @@ app.get('/board/rewrite/:idx', (req, res) => { // board/read/idx숫자 형식으
     pool.getConnection((err, connection) =>{ //조회수 1씩 증가
         if(err) throw err;
 
-        if(err) throw err;
+        // if(err) throw err;
         var sQuery = "SELECT idx, userid, title, content, date_format(modidate, '%Y-%m-%d %H:%i:%s') modidate, " +   
         "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard where idx=?";
         connection.query(sQuery,[idx], (err, rows) => {  // 한개의 글만조회하기때문에 마지막idx에 매개변수를 받는다
-        if(err) throw err;
-        
-        res.render('read', {title : '글 수정/삭제', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid}); // 첫번째행 한개의데이터만 랜더링 요청
+            if(err) throw err;
+            
+            let id = result[0].userid;
+            let point = result[0].userpoint;
+            let dataPrim = {id: id, point: point};
+            connection.release();
+            return res.render('read', {title : '글 수정/삭제', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim})
+            
+            // res.render('read', {title : '글 수정/삭제', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid}); // 첫번째행 한개의데이터만 랜더링 요청
         });
-    connection.release();
+    // connection.release();
     });
 });
 
@@ -433,12 +499,21 @@ app.get('/skin/:name', (req, res) => { //imagetest table있어야함
                         }
                         // console.log(result);
                         // console.log(skinName);
-                        console.log(skinName);
-                        res.render('garen', {test: skinName});
+                        // console.log(skinName);
+                        // res.render('garen', {test: skinName});
+
+                        connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
+                            if (err) throw err;
+                            
+                            let id = result[0].userid;
+                            let point = result[0].userpoint;
+                            let dataPrim = {id: id, point: point};
+                            res.render('garen', {test: skinName, dataPrim: dataPrim});
+                            connection.release();
+                        });
                     }
                 });
             });
-            connection.release();
         });
     } catch (err) {
         console.log(err);
@@ -446,7 +521,27 @@ app.get('/skin/:name', (req, res) => { //imagetest table있어야함
 });
 
 app.get('/skinTrade', (req, res) => {
-    res.render('test2');
+    if (req.session.loginstate==undefined) {
+        // let dataPrim = {id: '', point: ''};
+        let dataPrim = null
+        return res.render('test2', {dataPrim:dataPrim})
+    }
+    try {
+        pool.getConnection((err, connection) => {
+            if(err) throw err;
+            connection.query(`SELECT * FROM userinfo WHERE userid="${req.session.uid}"`, (err, result)=>{
+                if(err) throw err;
+                let id = result[0].userid;
+                let point = result[0].userpoint;
+                console.log("id, point : " + id + " " + point);
+                let dataPrim = {id: id, point: point};
+                res.render('test2', {dataPrim: dataPrim});
+            });
+            connection.release();
+        });
+    } catch(err) {
+        console.log(err);
+    }
 })
 
 app.post('/skin/:name', (req, res) => { 

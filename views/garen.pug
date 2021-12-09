@@ -53,10 +53,14 @@ head
     }
   script(type='module', src='/js/front.js')
   link(rel='stylesheet', href='/css/header.css', type='text/css')
+  link(rel='stylesheet', href='/css/infoBox.css', type='text/css')
 
 body
     header 
         include ./header.pug
+    
+    include ./infoBox.pug
+
     .main-container
         - for (let i=0; i<test.length; i++)
             if (i%3==0)
