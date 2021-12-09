@@ -47,16 +47,65 @@ app.get('/', (req, res) => {
 app.get('/mypage', (req, res) => {
     pool.getConnection((err, connection) => {
         if(err) throw err;
-
         var sQuery = `SELECT * FROM userboard  where userid='${req.session.uid}'`;
         connection.query(sQuery, (err, rows, fields) => {
             if(err) throw err;
 
             console.log(rows.length);
             console.log(rows[0]);
-            res.render('mypage', {title:"마이페이지", rows:rows, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
+
+            connection.query(`SELECT champseq FROM userinfo where userid="${req.session.uid}"`, (err, result)=> {
+                if (err) throw err;
+                let tmp =result[0].champseq.split('/');
+                let imgsrc = []
+                console.log(tmp);
+                tmp.forEach(val => {
+                    let number = Number(val);
+                    console.log(typeof(number));
+                    if (val!=0) {
+                        console.log(number);
+                        let test = `${number}`;
+                        console.log(typeof(test));
+                        connection.query(`SELECT imgsrc FROM skininfo where seq="${number}"`, (err, res4) => {
+                            if (err) console.log('error');
+                            console.log("res: " + res4[0].imgsrc);
+                            let a = `img/skin/${res4[0].imgsrc.split('_')[0]}/${res4[0].imgsrc}`;
+                            let path = {imgsrc: a};
+                            imgsrc.push(path);
+                            console.log(imgsrc);
+                            if (imgsrc.length==tmp.length-1) {
+                                res.render('mypage', {title:"마이페이지", imgsrc: imgsrc, rows:rows, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
+                                connection.release();
+                            }
+                            // res.render('mypage', {title:"마이페이지", rows:rows, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
+                        })
+                    }
+                })
+                // console.log('imgsrc: ' + imgsrc);
+            });
+                    
+            
+        
+            // let skinName = [];
+                
+            // var sQuery = `SELECT champseq FROM userinfo  where userid='${req.session.uid}'`;
+            // connection.query(sQuery, (err, result, fields) => {
+            //     if(err) throw err;
+            //     result[0].champseq.split('/');
+            //     for(i=0; i<result[0].champseq.split('/').length; i++) {
+            //         if(i=0) {continue}
+            //         else{
+            //             var skQuery = `SELECT imgsrc FROM skininfo where seq='${result[i]}'`
+            //             connection.query(skQuery, (err, result, fields) => {
+            //                 var name = result[0].split('_')[0];
+            //                 var path = `img/skin/${name}/${result[0]}`;
+            //                 skinName.push({skinsrc:path});
+            //                 res.render('mypage', {title:"마이페이지", rows:rows, skinpath:skinName, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
+            //             });
+            //         };
+            //     }
+            // })
         });
-        connection.release();
     });
 });
 
