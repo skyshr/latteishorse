@@ -113,7 +113,7 @@ app.post('/login', (req, res) => {
                     req.session.loginstate = 'okay';
                     req.session.uid = result[0].userid;
                     connection.release();
-                    res.send("<script>opener.parent.location.reload();window.close();</script>");
+                    res.send("<script>alert('환영합니다!');opener.parent.location.reload();window.close();</script>");
                     console.log(req.session.loginstate);
                     console.log(req.session.uid);
                 }
@@ -312,6 +312,8 @@ app.get('/sup', async(req, res) => {
 app.get('/skin/:name', (req, res) => { //imagetest table있어야함
     var tmp = req.params.name;
     console.log(tmp);
+    if (req.session.loginstate==undefined) {
+        return res.send("<script>alert('로그인이 필요한 서비스입니다.');window.location.href='/'</script>")};
     const sql = `SELECT * FROM imagetest WHERE champid=("${tmp}")`;
     const path = `img/skin/${tmp}/`
     let skinName = [];
@@ -364,21 +366,28 @@ app.post('/skin/:name', (req, res) => {
                 num = String(result[0].seq);
                 connection.query(`SELECT * FROM userinfo WHERE userid=("${req.session.uid}")`, (err, result) => {
                     let tmp = result[0].seq;
+                    let money = result[0].userpoint;
                     if(!tmp.includes(num)){
-                        tmp+=`/${num}`
-                        connection.query(`UPDATE usertest SET seq = ("${tmp}") WHERE id="${req.session.id}"`, (err, result) => {
-                            if (err) throw err;
-                            else {
-                                res.send(`<script>alert("구매 완료 되었습니다.");
-                                window.location.href='/skin';</script>`);
-                            }
-                        });
+                        if (money>point) {
+                            tmp+=`/${num}`
+                            money-=point;
+                            connection.query(`UPDATE usertest SET seq = ("${tmp}") WHERE id="${req.session.id}"`, (err, result) => {
+                                if (err) throw err;
+                                else {
+                                    res.send(`<script>alert("구매 완료 되었습니다.");
+                                    window.location.href='/skin';</script>`);
+                                }
+                            });
+                        }
+                        
+                        else {
+                            res.send(`<script>alert("포인트가 부족합니다.")</script>`)
+                        }
                     }
                     else{
                         res.send(`<script>alert("이미 보유한 스킨입니다");
                         window.location.href='/skin';</script>`);
                     }
-
                 })
             });
             connection.release();
