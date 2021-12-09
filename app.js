@@ -63,7 +63,7 @@ app.post('/signup', (req, res) => {
     pool.getConnection((err, connection) => {
         if(err) throw err;      
 
-        var sQuery = `INSERT INTO userinfo (userid, userpassword, username, useremail, useraddress, useraddressdet, userpoint) VALUES ('${req.body.id}', '${req.body.password}', '${req.body.username}', '${req.body.email}', '${req.body.address}', '${req.body.addressdet}', 200)`;
+        var sQuery = `INSERT INTO userinfo (userid, userpwd, username, useremail, useraddress, useraddressdet, userpoint) VALUES ('${req.body.id}', '${req.body.password}', '${req.body.username}', '${req.body.email}', '${req.body.address}', '${req.body.addressdet}', 200)`;
         var checkQuery = `SELECT userid FROM userinfo where userid='${req.body.id}'`;
         // var sQuery2 = `SELECT * FROM userboard WHERE userid=${req.session.uid}`;
         

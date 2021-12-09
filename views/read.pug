@@ -36,14 +36,16 @@ body
                         tr
                             td 조회수
                             td #{rows.hit}
-                div
-                    form(action="/board/")
 
                 div
                     a(href='/board/page') 목록
                 if(loginstate=='okay')
                     button(type='submit')  글 수정
-            if(loginstate=='okay')
-                form(action='/board/delete' method = 'post')
-                    input(type='hidden' name='idx' value=rows.idx)
-                    button(type='submit')  글 삭제
+            br
+            br
+            div
+                form(action="/board/comment")
+                    input(type="text")
+                    button(type="submit") 댓글 달기
+
+            div#commentlist
