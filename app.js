@@ -45,7 +45,19 @@ app.get('/', (req, res) => {
 
 // 마이페이지
 app.get('/mypage', (req, res) => {
-    res.render('mypage', {title:"마이페이지", loginstate:req.session.loginstate, id:req.session.uid}); 
+    pool.getConnection((err, connection) => {
+        if(err) throw err;
+
+        var sQuery = `SELECT * FROM userboard  where userid='${req.session.uid}'`;
+        connection.query(sQuery, (err, rows, fields) => {
+            if(err) throw err;
+
+            console.log(rows.length);
+            console.log(rows[0]);
+            res.render('mypage', {title:"마이페이지", rows:rows, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
+        });
+        connection.release();
+    });
 });
 
 app.post('/logout', (req, res) => {

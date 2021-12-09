@@ -20,9 +20,11 @@ nav.navbar
         input#login.navBarSignBtn(type='button', value='로그인')
     if(loginstate == "okay")
       li
-        input#mypage.navBarSignBtn(type='button', value='마이페이지')
+        form(action='/mypage', method='get')
+          input#mypage.navBarSignBtn(type='submit', value='마이페이지')
       li
-        input#logoutbtn.navBarSignBtn(type='button', value='로그아웃')
+        form(action='/logout', method='post')
+          input#logoutbtn.navBarSignBtn(type='submit', value='로그아웃')
   .nav_toggleBtn
     .line1
     .line2
