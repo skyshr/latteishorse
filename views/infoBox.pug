@@ -13,8 +13,9 @@
 //-     br
 //-     .infoBoxUserPoint
 //-       a(href="") point가 들어올곳.
-
-if (dataPrim) //dataPrim 값이 null이 아니면 (로그인 했거나 마이페이지 아닌 경우)
+-if (!dataPrim)
+div
+-if (dataPrim) //dataPrim 값이 null이 아니면 (로그인 했거나 마이페이지 아닌 경우)
   .infoBoxContainer
     .infoBox
       .infoBoxUserID
