@@ -21,7 +21,8 @@ create table userboard (
     content varchar(256) null,
     regdate varchar(256) null,
     modidate varchar(256) null,
-    hit varchar(256) null
+    hit varchar(256) null,
+    likeuser varchar(512) null
 );
 
 select * from userboard;

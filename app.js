@@ -325,7 +325,7 @@ app.post('/board/write', (req, res) => {
     // req 객체로 body 속성에서 input 파라미터 가져오기
     pool.getConnection((err, connection) =>{
         if(err) throw err;
-        var sQuery = "insert into userboard(userid, title, content, regdate, modidate, hit) values(?,?,?,now(),now(),0)";  // ? 는 매개변수
+        var sQuery = "insert into userboard(userid, title, content, regdate, modidate, hit, likeuser) values(?,?,?,now(),now(),0,0)";  // ? 는 매개변수
         var pQuery = `UPDATE userinfo set userpoint=userpoint+10 where userid='${userid}'`;
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
@@ -364,6 +364,7 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
                             dataPrim = {id: id, point: point};
                         }
                         
+                        req.session.idx = idx;
                         connection.release();
                         return res.render('read', {title : '글 상세보기', rows:rows[0], comrows:comrows, loginstate:req.session.loginstate, id:req.session.uid, dataPrim:dataPrim}); // 첫번째행 한개의데이터만 랜더링 요청
                     })
@@ -375,6 +376,43 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
         });
     });
 });
+
+app.post('/board/like', (req, res) => {
+    var idx = req.session.idx;
+    var id = req.session.uid;
+    var cQuery =`SELECT likeuser FROM userboard WHERE idx='${idx}'`;
+    
+    pool.getConnection((err, connection)=>{
+        if(err) throw err;
+
+        connection.query(cQuery, (err, result) => {
+            if(err) throw err;
+
+            var likeusers = result[0].likeuser.split('/'); //배열
+            if(!likeusers.includes(id)) {
+                likeusers.push(id);
+                var likeuserstr = likeusers.join('/');
+                var sQuery =`UPDATE userboard set likeuser="${likeuserstr}" where idx='${idx}'`;
+                connection.query(sQuery, (err,rows) => {
+                    if(err) throw err;
+
+                    connection.release();
+                    res.redirect('/board/read/' + idx);
+                });
+            } else {
+                var filtered = likeusers.filter((element) => element !== `${id}`);
+                var likeuserj = filtered.join('/')
+                var tQuery =`UPDATE userboard set likeuser="${likeuserj}" where idx='${idx}'`;
+                connection.query(tQuery, (err,rows) => {
+                    if(err) throw err;
+
+                    connection.release();
+                    res.redirect('/board/read/' + idx);
+                });
+            }
+        })
+    }) 
+})
 
 app.post('/board/update', (req, res) => {
     console.log("update")

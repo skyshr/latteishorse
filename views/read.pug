@@ -45,7 +45,9 @@ body
                     a(href='/board/page') 목록
             if(id==rows.userid)
                 form(action='/board/rewrite', method='get')
-                    button(type='submit')  글 수정
+                    button(type='submit') 글 수정
+                form(action='/board/like', method='post')
+                    button(type='submit') 좋아요
             br
             br
             div
