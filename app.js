@@ -352,7 +352,7 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
             "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard where idx=?";
             connection.query(sQuery,[idx], (err, rows) => {  // 한개의 글만조회하기때문에 마지막idx에 매개변수를 받는다
                 if(err) throw err;
-                var cQuery = "SELECT idx, userid, comments, likecnt from commentboard where board_idx=?";
+                var cQuery = "SELECT idx, userid, comments from commentboard where board_idx=?";
                 connection.query(cQuery,[idx], (err, comrows) => {
                     if(err) throw err;
                     connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
@@ -481,8 +481,8 @@ app.post('/board/comment', (req, res) => {
     var datas = [userid, comments, board_idx];
     pool.getConnection((err, connection) =>{
         if(err) throw err;
-        var sQuery = "insert into commentboard(userid, comments, likecnt, board_idx) values(?,?,0,?)";  // ? 는 매개변수
         var pQuery = `UPDATE userinfo set userpoint=userpoint+5 where userid='${userid}'`;
+        var sQuery = "insert into commentboard(userid, comments, board_idx) values(?,?,?)";  // ? 는 매개변수
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
             connection.query(pQuery, (err, result) => {
