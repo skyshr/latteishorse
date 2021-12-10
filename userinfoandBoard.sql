@@ -3,7 +3,7 @@ USE apptestdb;
 
 create TABLE userinfo (
     userid varchar(32) not null PRIMARY KEY,
-    userpassword varchar(32) not null,
+    userpassword varchar(512) not null,
     username varchar(16) not null,
     useremail varchar(64) not null,
     useraddress varchar(64) not null,
