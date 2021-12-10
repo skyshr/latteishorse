@@ -326,9 +326,15 @@ app.post('/board/write', (req, res) => {
     pool.getConnection((err, connection) =>{
         if(err) throw err;
         var sQuery = "insert into userboard(userid, title, content, regdate, modidate, hit) values(?,?,?,now(),now(),0)";  // ? 는 매개변수
+        var pQuery = `UPDATE userinfo set userpoint=userpoint+10 where userid='${userid}'`;
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
-            res.redirect('/board/page');
+
+            connection.query(pQuery, (err, result) => {
+                if(err) throw err;
+              
+                res.redirect('/board/page');
+            })
         })
         connection.release();
     });
@@ -476,11 +482,16 @@ app.post('/board/comment', (req, res) => {
     pool.getConnection((err, connection) =>{
         if(err) throw err;
         var sQuery = "insert into commentboard(userid, comments, likecnt, board_idx) values(?,?,0,?)";  // ? 는 매개변수
+        var pQuery = `UPDATE userinfo set userpoint=userpoint+5 where userid='${userid}'`;
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
+            connection.query(pQuery, (err, result) => {
+                if(err) throw err;
+                
+                connection.release();
+                res.redirect('/board/read/' + board_idx);
+            })
         })
-        res.redirect('/board/read/' + board_idx);
-        connection.release();
     });
 });
 
@@ -575,7 +586,7 @@ app.get('/skin/:name', (req, res) => { //imagetest table있어야함
                             let id = result[0].userid;
                             let point = result[0].userpoint;
                             let dataPrim = {id: id, point: point};
-                            res.render('garen', {test: skinName, dataPrim: dataPrim});
+                            res.render('garen', {test: skinName, dataPrim: dataPrim, loginstate:req.session.loginstate, id:req.session.uid});
                             connection.release();
                         });
                     }
@@ -602,7 +613,7 @@ app.get('/skinTrade', (req, res) => {
                 let point = result[0].userpoint;
                 console.log("id, point : " + id + " " + point);
                 let dataPrim = {id: id, point: point};
-                res.render('test2', {dataPrim: dataPrim});
+                res.render('test2', {dataPrim: dataPrim,  loginstate:req.session.loginstate, id:req.session.uid});
             });
             connection.release();
         });

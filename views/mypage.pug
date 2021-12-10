@@ -6,7 +6,7 @@ head(lang="ko")
   title #{title}
   link(rel='stylesheet', href='/css/header.css', type='text/css')
   link(rel='stylesheet', href='/css/table.css', type='text/css')
-  
+
 body(style="text-align : center")
     header 
         include ./header.pug
@@ -35,11 +35,11 @@ body(style="text-align : center")
                   td #{data.hit}
                   td #{data.modidate}
                   td #{data.regdate}
-            
-            table(border='1')
-              tbody
-                tr
-                -for(var i = 0; i<imgsrc.length; i++)
-                    td #{i}
-                    td 
-                      img(src='/'+imgsrc[i].imgsrc)
+        br
+
+        table(border='1')
+          tbody
+            tr
+            -for(var i = 0; i<imgsrc.length; i++)
+                td 
+                  img(src='/'+imgsrc[i].imgsrc)
