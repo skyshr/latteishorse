@@ -13,7 +13,7 @@
     padding: 3px;
 
     display:table;
-    position: fixed;
+    position: absolute;
 
     z-index: 2;
 }
