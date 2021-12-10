@@ -6,8 +6,28 @@ const session = require("express-session");
 const crypto = require('crypto')
 const algorithm = 'aes-256-cbc';
  
-const cipher = crypto.createCipher(algorithm, "skysir");
-const deciper = crypto.createDecipher(algorithm, "skysir");
+const ENCRYPTION_KEY = 'abcdefghijklmnop'.repeat(2);
+const IV_LENGTH = 16;
+
+function encrypt(text) {
+    const iv = crypto.randomBytes(IV_LENGTH)
+    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+
+    const encrypted = cipher.update(text);
+
+    return (iv.toString('hex') + ':' + Buffer.concat([encrypted, cipher.final()]).toString('hex'));
+}
+
+function decrypt(text) {
+    const textParts = text.split(':');
+    const iv = Buffer.from(textParts.shift(), 'hex');
+    const encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+
+    const decrypted = decipher.update(encryptedText);
+
+    return Buffer.concat([decrypted, decipher.final()]).toString();
+}
 
 // app.use(express.static(`${__dirname}/css`));
 // app.use(express.static(`${__dirname}/js`));
@@ -165,9 +185,8 @@ app.post('/signup', (req, res) => {
         if(err) throw err;      
 
         var password = req.body.password;
-        let result = cipher.update(password, 'utf8', 'base64');
-        result += cipher.final('base64');
-        var sQuery = `INSERT INTO userinfo (userid, userpassword, username, useremail, useraddress, useraddressdetail, userpoint) VALUES ('${req.body.id}', '${result}', '${req.body.username}', '${req.body.email}', '${req.body.address}', '${req.body.addressdet}', 200)`;
+        const encryptResult = encrypt(password);
+        var sQuery = `INSERT INTO userinfo (userid, userpassword, username, useremail, useraddress, useraddressdetail, userpoint) VALUES ('${req.body.id}', '${encryptResult}', '${req.body.username}', '${req.body.email}', '${req.body.address}', '${req.body.addressdet}', 200)`;
         var checkQuery = `SELECT userid FROM userinfo where userid='${req.body.id}'`;
         // var sQuery2 = `SELECT * FROM userboard WHERE userid=${req.session.uid}`;
         
@@ -205,15 +224,14 @@ app.post('/login', (req, res) => {
         connection.query(sQuery, (err, result, fields) => {
             if(err) return err;
 
-            let result2 = deciper.update(result[0].userpassword, 'base64', 'utf8');
-            result2 += deciper.final('utf8');
+            const decryptResult = decrypt(result[0].userpassword);
             console.log(result[0]);
             if(result.length == 0) {
                 connection.release();
                 res.send('<script>alert("아이디를 확인해주세요"); window.location.href = "/login"; </script>');
             }
             else if(req.body.id == result[0].userid) {
-                if(req.body.pwd == result2) {
+                if(req.body.pwd == decryptResult) {
                     console.log("로그인 성공");
                     req.session.loginstate = 'okay';
                     req.session.uid = result[0].userid;
