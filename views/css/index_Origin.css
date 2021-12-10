@@ -134,12 +134,11 @@ a {
 
   .leftPopupContainer {
     display: block;
-    width: 430px;
-    height: 350px;
-    /* background-color: var(--leftPopup-color); */
-    background-color: rgba(128, 128, 128, 0.123);
+    width: 300px;
+    height: 550px;
+    background-color: var(--leftPopup-color);
     position: absolute;
-    margin-left: 50px;
+    margin-left: 130px;
     margin-top: -100px;
     padding: 10px;
     opacity: 0;
@@ -148,31 +147,16 @@ a {
   }
   .leftPopupBox {
     width: 280px;
-    height: 500px;
-    /* background-color: var(--leftPopup-color); */
+    height: 530px;
+    background-color: var(--leftPopup-color);
     opacity: 0;
+
+    
 
     display:table-cell;
     vertical-align:middle;
 
     border: 3px solid var(--navText-color);
-  }
-  .leftPopupImg {
-    position: absolute;
-    width: 530px;
-    height: 555px;
-    top: -9%;
-    left: -20%;
-    z-index: 2;
-  }
-  .leftPopupBG {
-    position: absolute;
-    /* background-color: blue; */
-    width: 550px;
-    height: 300px;
-    z-index: 0;
-    margin-left: -30px;
-    margin-top: -80px;
   }
 
   .introBox {
@@ -405,15 +389,11 @@ a {
   @media (max-width: 768px) {
     
 
-    /* .leftPopupContainer,
-    .leftPopupBox {
-      left: -450px;
-    } */
     .leftPopupContainer,
     .leftPopupBox {
-      display: none;
+      left: -450px;
+      /* display: none; */
     }
-    
 
     .freeSkin_rightIn,
     .freeSkin_leftIn {
