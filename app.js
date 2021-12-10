@@ -85,7 +85,7 @@ app.get('/mypage', (req, res) => {
 
             console.log(rows.length);
             console.log(rows[0]);
-
+            let skinname= [];
             connection.query(`SELECT champseq FROM userinfo where userid="${req.session.uid}"`, (err, result)=> {
                 if (err) throw err;
                 let tmp =result[0].champseq.split('/');
@@ -103,15 +103,16 @@ app.get('/mypage', (req, res) => {
                         console.log(number);
                         let test = `${number}`;
                         console.log(typeof(test));
-                        connection.query(`SELECT imgsrc FROM skininfo where seq="${number}"`, (err, res4) => {
+                        connection.query(`SELECT champid, imgsrc FROM skininfo where seq="${number}"`, (err, res4) => {
                             if (err) console.log('error');
                             console.log("res: " + res4[0].imgsrc);
                             let a = `img/skin/${res4[0].imgsrc.split('_')[0]}/${res4[0].imgsrc}`;
                             let path = {imgsrc: a};
                             imgsrc.push(path);
                             console.log(imgsrc);
+                            skinname.push(res4[0].champid);
                             if (imgsrc.length==tmp.length-1) {
-                                res.render('mypage', {title:"마이페이지", imgsrc: imgsrc, rows:rows, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
+                                res.render('mypage', {title:"마이페이지", imgsrc: imgsrc, skinname:skinname, rows:rows, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
                                 connection.release();
                             }
                             // res.render('mypage', {title:"마이페이지", rows:rows, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
