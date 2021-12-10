@@ -349,7 +349,7 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
         connection.query(hQuery,[idx], (err, result) => {
             if(err) throw err;
             var sQuery = "SELECT idx, userid, title, content, date_format(modidate, '%Y-%m-%d %H:%i:%s') modidate, " +   
-            "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard where idx=?";
+            "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit, likeuser from userboard where idx=?";
             connection.query(sQuery,[idx], (err, rows) => {  // 한개의 글만조회하기때문에 마지막idx에 매개변수를 받는다
                 if(err) throw err;
                 var cQuery = "SELECT idx, userid, comments from commentboard where board_idx=?";
@@ -381,36 +381,39 @@ app.post('/board/like', (req, res) => {
     var idx = req.session.idx;
     var id = req.session.uid;
     var cQuery =`SELECT likeuser FROM userboard WHERE idx='${idx}'`;
-    
+    var hQuery = `UPDATE userboard set hit=hit-1 where idx='${idx}'`;
     pool.getConnection((err, connection)=>{
         if(err) throw err;
-
-        connection.query(cQuery, (err, result) => {
+        connection.query(hQuery, (err, re)=> {
             if(err) throw err;
-
-            var likeusers = result[0].likeuser.split('/'); //배열
-            if(!likeusers.includes(id)) {
-                likeusers.push(id);
-                var likeuserstr = likeusers.join('/');
-                var sQuery =`UPDATE userboard set likeuser="${likeuserstr}" where idx='${idx}'`;
-                connection.query(sQuery, (err,rows) => {
-                    if(err) throw err;
-
-                    connection.release();
-                    res.redirect('/board/read/' + idx);
-                });
-            } else {
-                var filtered = likeusers.filter((element) => element !== `${id}`);
-                var likeuserj = filtered.join('/')
-                var tQuery =`UPDATE userboard set likeuser="${likeuserj}" where idx='${idx}'`;
-                connection.query(tQuery, (err,rows) => {
-                    if(err) throw err;
-
-                    connection.release();
-                    res.redirect('/board/read/' + idx);
-                });
-            }
+            connection.query(cQuery, (err, result) => {
+                if(err) throw err;
+    
+                var likeusers = result[0].likeuser.split('/'); //배열
+                if(!likeusers.includes(id)) {
+                    likeusers.push(id);
+                    var likeuserstr = likeusers.join('/');
+                    var sQuery =`UPDATE userboard set likeuser="${likeuserstr}" where idx='${idx}'`;
+                    connection.query(sQuery, (err,rows) => {
+                        if(err) throw err;
+    
+                        connection.release();
+                        res.redirect('/board/read/' + idx);
+                    });
+                } else {
+                    var filtered = likeusers.filter((element) => element !== `${id}`);
+                    var likeuserj = filtered.join('/')
+                    var tQuery =`UPDATE userboard set likeuser="${likeuserj}" where idx='${idx}'`;
+                    connection.query(tQuery, (err,rows) => {
+                        if(err) throw err;
+    
+                        connection.release();
+                        res.redirect('/board/read/' + idx);
+                    });
+                }
+            }) 
         })
+        
     }) 
 })
 

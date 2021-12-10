@@ -40,12 +40,19 @@ body
                         tr
                             td 조회수
                             td #{rows.hit}
+                        tr 
+                            td 좋아요수
+                            if(rows.likeuser == '0')
+                                td 0
+                            if(rows.likeuser != '0')
+                                td #{rows.likeuser.split('/').length-1}
 
                 div
                     a(href='/board/page') 목록
             if(id==rows.userid)
                 form(action='/board/rewrite', method='get')
                     button(type='submit') 글 수정
+            if(loginstate=='okay')        
                 form(action='/board/like', method='post')
                     button(type='submit') 좋아요
             br
