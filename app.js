@@ -439,7 +439,6 @@ app.post('/board/comment', (req, res) => {
     var userid = req.session.uid;
     var comments = req.body.comment;
     var board_idx = req.body.idx;
-    var idx = req.body.idx;
     var datas = [userid, comments, board_idx];
     pool.getConnection((err, connection) =>{
         if(err) throw err;
@@ -447,8 +446,24 @@ app.post('/board/comment', (req, res) => {
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
         })
-        res.redirect('/board/read/' + idx);
+        res.redirect('/board/read/' + board_idx);
         connection.release();
+    });
+});
+
+app.post('/board/comment/delete', (req, res) => {
+    var board_idx = req.body.idx;
+    var comidx = req.body.comidx;
+    pool.getConnection((err, connection) =>{
+        if(err) throw err;
+        var sQuery = `DELETE from commentboard where idx='${comidx}'`; 
+            connection.query(sQuery, (err, result) => {
+            if(err) throw err;
+            else {
+                res.redirect('/board/read/' + board_idx)
+            }
+            connection.release();
+        }); 
     });
 });
 

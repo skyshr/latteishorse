@@ -60,7 +60,6 @@ body
             div#commentlist
                 if(comrows.length>0)
                     table(border=1)
-                        input(type='hidden' name='idx' value=comrows.idx)
                         tbody
                             td 작성자
                             td 내용
@@ -71,3 +70,9 @@ body
                                     td #{data.userid}
                                     td #{data.comments}
                                     td #{data.likecnt}
+                                    -if(id==data.userid)
+                                        td(style="border:0")
+                                            form(action="/board/comment/delete" method = "post")
+                                                input(type='hidden' name='idx' value=rows.idx)
+                                                input(type='hidden' name='comidx' value=data.idx)
+                                                button(type="submit") 댓글 삭제
