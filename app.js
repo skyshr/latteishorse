@@ -5,11 +5,9 @@ const dotenv = require('dotenv').config();
 const session = require("express-session");
 const crypto = require('crypto')
 const algorithm = 'aes-256-cbc';
-
-const key = crypto.scryptSync('wolfootjaIsSpecial','specialSalt', 32); 
-const iv = crypto.randomBytes(16); 
-const cipher = crypto.createCipheriv(algorithm, key, iv);
-const deciper = crypto.createDecipheriv(algorithm, key, iv);
+ 
+const cipher = crypto.createCipher(algorithm, "skysir");
+const deciper = crypto.createDecipher(algorithm, "skysir");
 
 // app.use(express.static(`${__dirname}/css`));
 // app.use(express.static(`${__dirname}/js`));
