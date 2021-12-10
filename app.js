@@ -270,6 +270,36 @@ app.get('/board/page/:page', (req, res) => { // 게시글 리스트에 :page가 
     });
 });
 
+app.post('/board/search', (req,res) => {
+    var item = req.body.category;
+    var searchvalue = req.body.search;
+    console.log(item + searchvalue);
+    pool.getConnection((err, connection) => {
+        if(err) throw err;
+        var sQuery =  `select idx, userid, title, date_format(modidate,'%Y-%m-%d %H:%i:%s') modidate, date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard where ${item}="${searchvalue}"`;  
+
+        connection.query(sQuery, (err, rows) => {
+            if (err) throw err;
+            if (req.session.uid==null) {
+                let dataPrim = null;
+                connection.release();
+                console.log(rows[0]);
+                return res.render('searchpage', {title : '검색결과', rows:rows, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim}); 
+            }
+            connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
+                if (err) throw err;
+                
+                let id = result[0].userid;
+                let point = result[0].userpoint;
+                let dataPrim = {id: id, point: point};
+                connection.release();
+                console.log(rows[0]);
+                return res.render('searchpage', {title : '검색결과', rows:rows, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim}); 
+            })
+        });
+    });
+})
+
 app.get('/board/write', (req, res) => {  // board/write 로 접속하면 글쓰기페이지로 이동
     console.log(req.session.uid)
     pool.getConnection((err, connection) =>{
