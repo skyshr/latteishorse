@@ -7,7 +7,7 @@ create TABLE userinfo (
     username varchar(16) not null,
     useremail varchar(64) not null,
     useraddress varchar(64) not null,
-    useraddressdet varchar(64) not null,
+    useraddressdetail varchar(64) not null,
     userpoint int not null,
     champseq varchar(20000) default ""
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
