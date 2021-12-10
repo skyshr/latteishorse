@@ -13,13 +13,13 @@
     padding: 3px;
 
     display:table;
-    position: absolute;
+    position: fixed;
 
     z-index: 2;
 }
 
 .infoBox {
-    background-color: rgba(39, 39, 39, 0.329);
+    background-color: rgba(39, 39, 39);
     border: 3px solid var(--navText-color);
     border-radius: 50%;
     display:table-cell;
@@ -37,3 +37,6 @@
     text-decoration: none;
 }
 
+.infolet {
+    color : var(--navText-color)
+}
