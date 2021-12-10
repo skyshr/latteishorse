@@ -34,7 +34,6 @@ create table commentboard (
 	idx int not null auto_increment PRIMARY KEY, 
     userid varchar(256) null,
     comments varchar(256) null,
-    likecnt varchar(256) null,
     board_idx int,
     foreign key (board_idx) references userboard(idx) 
     on update cascade on delete cascade
