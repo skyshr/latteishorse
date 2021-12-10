@@ -1,7 +1,14 @@
+h1 {
+    color: rgb(226, 164, 71);
+}
+
 table {
     width:50%; 
     margin-left:25%; 
     margin-right:25%;
+    color: rgb(226, 164, 71);
+    border-color: white;
+    border-collapse: collapse;
 }
 
 img {
