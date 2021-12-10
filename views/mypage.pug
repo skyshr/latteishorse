@@ -37,9 +37,10 @@ body(style="text-align : center")
                   td #{data.regdate}
         br
 
-        table(border='1')
-          tbody
-            tr
-            -for(var i = 0; i<imgsrc.length; i++)
-                td 
-                  img(src='/'+imgsrc[i].imgsrc)
+        if (imgsrc)
+          table(border='1')
+            tbody
+              tr
+              -for(var i = 0; i<imgsrc.length; i++)
+                  td 
+                    img(src='/'+imgsrc[i].imgsrc)
