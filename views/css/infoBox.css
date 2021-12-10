@@ -1,19 +1,39 @@
+:root {
+    --navText-color: rgb(226, 164, 71);
+    /* --leftPopup-color: rgba(70, 70, 70, 0.61); */
+  }
+
 .infoBoxContainer {
     /* background-color: red; */
-    width: 20vh;
+    width: 15vh;
     height: 15vh;
-    top: 200px;
-    right: 30px;
+    top: 180px;
+    right: 15px;
+
+    padding: 3px;
 
     display:table;
     position: absolute;
+
+    z-index: 2;
 }
 
 .infoBox {
-    background-color: royalblue;
-    border: 3px solid yellow;
-    border-radius: 10px;
+    background-color: rgba(39, 39, 39, 0.329);
+    border: 3px solid var(--navText-color);
+    border-radius: 50%;
     display:table-cell;
     vertical-align:middle;
+}
+
+.infoBoxUserID {
+    /* margin-left: 10px; */
+    text-align: center;
+    text-decoration: none;
+}
+.infoBoxUserPoint {
+    /* margin-left: 10px; */
+    text-align: center;
+    text-decoration: none;
 }
 

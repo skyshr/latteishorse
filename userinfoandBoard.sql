@@ -14,9 +14,6 @@ create TABLE userinfo (
 select * from userinfo;
 -- drop table userinfo;
 
-
-
-
 create table userboard (
 	idx int not null auto_increment PRIMARY KEY, 
     userid varchar(256) null,
@@ -41,3 +38,21 @@ create table commentboard (
 
 select * from commentboard;
 -- drop table commentboard;
+
+create table imagetest(
+	champid varchar(64) not null primary key,
+    src varchar(10240) not null
+);
+
+select * from imagetest;
+
+create table skininfo (
+	seq int not null auto_increment,
+    champid varchar(32),
+    imgsrc varchar(256) not null,
+    primary key(seq)
+)ENGINE=InnoDB default charset=utf8;
+
+drop table skininfo;
+select * from skininfo;
+alter table skininfo add cpoint int
