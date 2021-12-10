@@ -351,10 +351,13 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
                     if(err) throw err;
                     connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
                         if (err) throw err;
+                        let dataPrim=null;
+                        if(result.length!=0){
+                            let id = result[0].userid;
+                            let point = result[0].userpoint;
+                            dataPrim = {id: id, point: point};
+                        }
                         
-                        let id = result[0].userid;
-                        let point = result[0].userpoint;
-                        let dataPrim = {id: id, point: point};
                         connection.release();
                         return res.render('read', {title : '글 상세보기', rows:rows[0], comrows:comrows, loginstate:req.session.loginstate, id:req.session.uid, dataPrim:dataPrim}); // 첫번째행 한개의데이터만 랜더링 요청
                     })
@@ -469,7 +472,6 @@ app.post('/board/comment', (req, res) => {
     var userid = req.session.uid;
     var comments = req.body.comment;
     var board_idx = req.body.idx;
-    var idx = req.body.idx;
     var datas = [userid, comments, board_idx];
     pool.getConnection((err, connection) =>{
         if(err) throw err;
@@ -477,8 +479,24 @@ app.post('/board/comment', (req, res) => {
         connection.query(sQuery, datas, (err,rows) => { // datas 를 매개변수로 추가
             if (err) throw err;
         })
-        res.redirect('/board/read/' + idx);
+        res.redirect('/board/read/' + board_idx);
         connection.release();
+    });
+});
+
+app.post('/board/comment/delete', (req, res) => {
+    var board_idx = req.body.idx;
+    var comidx = req.body.comidx;
+    pool.getConnection((err, connection) =>{
+        if(err) throw err;
+        var sQuery = `DELETE from commentboard where idx='${comidx}'`; 
+            connection.query(sQuery, (err, result) => {
+            if(err) throw err;
+            else {
+                res.redirect('/board/read/' + board_idx)
+            }
+            connection.release();
+        }); 
     });
 });
 
