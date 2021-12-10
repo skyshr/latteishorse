@@ -415,8 +415,8 @@ app.get('/board/rewrite', (req, res) => {
         connection.query(sQuery,[idx], (err, rows) => {  // 한개의 글만조회하기때문에 마지막idx에 매개변수를 받는다
             if(err) throw err;
             
-            let id = result[0].userid;
-            let point = result[0].userpoint;
+            let id = rows[0].userid;
+            let point = rows[0].userpoint;
             let dataPrim = {id: id, point: point};
             connection.release();
             return res.render('rewrite', {title : '글 수정/삭제', rows:rows[0], loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim})

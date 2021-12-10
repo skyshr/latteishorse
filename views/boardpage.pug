@@ -12,7 +12,7 @@ body(style="text-align : center")
     header 
         include ./header.pug
 
-    include ./infoBox.pug
+        include ./infoBox.pug
     
     main
         h1 #{title}
@@ -47,4 +47,7 @@ body(style="text-align : center")
                         -for (var j = 0; j < rows.length / page_num; j++) 
                             a(href='/board/page/' + (j + 1)) #{j+1}
                             span &nbsp&nbsp
-    
+
+                tr
+                    form(action="/board/search" method = "post")
+                        input(name ="search" type="text" required='')

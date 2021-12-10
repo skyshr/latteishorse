@@ -11,7 +11,7 @@ body
     header 
         include ./header.pug
 
-    include ./infoBox.pug
+        include ./infoBox.pug
 
     main(style="text-align : center")
         h1 #{title}
@@ -26,11 +26,11 @@ body
                         tr
                             td 제목
                             td
-                                input#title(type='text' name='title' value=rows.title required=''  style="width:99%;")
+                                input#title(type='text' name='title' value=rows.title required=''  style="width:99%;" readonly)
                         tr
                             td 내용
                             td
-                                textarea#content(name='content' cols='30' rows='10' required='' style="width:99%; resize:none;") #{rows.content}
+                                textarea#content(name='content' cols='30' rows='10' required='' style="width:99%; resize:none;" readonly) #{rows.content}
                         tr
                             td 변경일
                             td #{rows.modidate}
@@ -55,7 +55,6 @@ body
                         input#comment(name ="comment" type="text" required='')
                         button(type="submit") 댓글 달기
                 if(!loginstate)
-                    
                     input(value ="로그인 후 댓글을 달 수 있습니다" style="text-align:center; width:40%;" readonly )
 
             div#commentlist
