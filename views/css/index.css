@@ -405,10 +405,15 @@ a {
   @media (max-width: 768px) {
     
 
-    .leftPopupContainer,
+    /* .leftPopupContainer,
     .leftPopupBox {
       left: -450px;
+    } */
+    .leftPopupContainer,
+    .leftPopupBox {
+      display: none;
     }
+    
 
     .freeSkin_rightIn,
     .freeSkin_leftIn {
