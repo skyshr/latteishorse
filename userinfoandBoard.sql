@@ -46,6 +46,7 @@ create table imagetest(
 );
 
 select * from imagetest;
+-- drop table imagetest;
 
 create table skininfo (
 	seq int not null auto_increment,
