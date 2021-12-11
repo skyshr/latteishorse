@@ -41,9 +41,6 @@ body
                             td 조회수
                             td #{rows.hit}
                 div
-                    form(action="/board/")
-
-                div
                     a(href='/board/page') 목록
                 if(loginstate=='okay')
                     button(type='submit')  글 수정
