@@ -224,13 +224,14 @@ app.post('/login', (req, res) => {
         connection.query(sQuery, (err, result, fields) => {
             if(err) return err;
 
-            const decryptResult = decrypt(result[0].userpassword);
+            // const decryptResult = decrypt(result[0].userpassword);
             console.log(result[0]);
             if(result.length == 0) {
                 connection.release();
                 res.send('<script>alert("아이디를 확인해주세요"); window.location.href = "/login"; </script>');
             }
             else if(req.body.id == result[0].userid) {
+                const decryptResult = decrypt(result[0].userpassword);
                 if(req.body.pwd == decryptResult) {
                     console.log("로그인 성공");
                     req.session.loginstate = 'okay';

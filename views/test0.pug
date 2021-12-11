@@ -7,28 +7,18 @@ head
   style.
     .champion {
     //- background-color: violet;
-    //- position: absolute;
-    width: 1200px;
+    width: 900px;
     height: auto;
     margin: 0 auto;
     //- margin-left: 13%;
-    margin-top: 6%;
+    margin-top: 7%;
     border: 2px solid rgb(226, 164, 71);
     //- background-image: url('./img/wallpaper1.jpg')
     }
     .line_seperator {
     //- background-color: yellowgreen;
-    width: 100%;
-    height: 40px;
     display: flex;
     justify-content: flex-start;
-    align-items: center;
-    border-bottom: 1px solid rgb(226, 164, 71);
-    }
-    .formbox {
-      width: 100%;
-      height: auto;
-      //- margin: auto;
     }
     .main-container {
     //- background-color: tomato;
@@ -36,38 +26,25 @@ head
     width: 95%;
     height: auto;
     margin: auto;
-    margin-top: 3px;
     justify-content: center;
     flex-wrap: wrap;
     text-align: center;
     }
     button {
     margin: auto;
-    width: 100px;
-    height: 40px;
+    margin-bottom: 3%;
+    width: 70px;
+    height: 30px;
     font-weight: 500;
-    font-size: 1.7vh;
-    background-color: rgb(226, 164, 71)
     //- padding: auto;
-    }
-    .linestart {
-      margin-left: 6.5%;
     }
     a {
     margin: auto;
     }
     .test {
-    margin-left: 8px;
-    margin-top: 3px;
-    margin-bottom: 4px;
+    margin: auto;
     padding-bottom: 7px;
-    font-size: 0.8rem;
-    font-weight: 550;
-    background-color: rgba(70, 70, 70, 0.41);
-    color: rgb(226, 164, 71);
-    }
-    .dummy {
-      background-color: none;
+    font-size: 0.7rem;
     }
     .t1 {
     margin: auto;
@@ -78,33 +55,10 @@ head
     font-weight: 550;
     }
     img {
-    width: 110px;
-    height: auto;
+    width: 90px;
+    height: 90px;
     cursor: pointer;
     }
-    .katarinaBox {
-      position: fixed;
-      top: 10%;
-    }
-    .leesinBox {
-      position: fixed;
-      right: 0;
-      top: 10%;
-    }
-    .map {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    .dummy {
-      width: 93%;
-      height: auto;
-      display: flex;
-      justify-content: flex-start;
-      flex-wrap: no-wrap
-    }
-
   link(rel='stylesheet', href='/css/header.css', type='text/css')
   link(rel='stylesheet', href='/css/infoBox.css', type='text/css')
 
@@ -112,24 +66,10 @@ header
   include ./header.pug
 
 include ./infoBox.pug
-
-.map 
-  img.map(src='/img/main/map_02.png')
-.katarinaBox
-  form.imgForm(action='/skin/Katarina', method='get')
-    img.katarina(src='/img/main/champion_left.png' style="width:410px; height:450px")
-.leesinBox
-  form.imgForm(action='/skin/LeeSin', method='get')
-    img.leesin(src='/img/main/champion_right.png' style="width:390px; height: auto")
-.leftPopupBox.lefyPopupDelay
-            div
-              img.leftPopupImg(src='./img/main/nidalee.png')
-            .leftPopupBG
-              img.leftPopupBG(src='./img/main/logoLeftPopupbg.png')
 .champion
   .line_seperator
-    form.formbox(action='/', method='get')
-      button.line.linestart(type='submit') &#xC804;&#xCCB4;
+    form(action='/', method='get')
+      button.line(type='submit') &#xC804;&#xCCB4;
       button.line(type='submit') &#xD0D1;
       button.line(type='submit') &#xC815;&#xAE00;
       button.line(type='submit') &#xBBF8;&#xB4DC;
@@ -1054,30 +994,49 @@ include ./infoBox.pug
           form.form(action='/skin/Fiddlesticks', method='get')
             img.imgicon(src='./img/iconimg/Fiddlesticks.png')
         .champname &#xD53C;&#xB4E4;&#xC2A4;&#xD2F1;
-    .dummy
-      .test
-        .content-box
-          .img-box
-            form.form(action='/skin/Fiora', method='get')
-              img.imgicon(src='./img/iconimg/Fiora.png')
-          .champname &#xD53C;&#xC624;&#xB77C;
-      .test
-        .content-box
-          .img-box
-            form.form(action='/skin/Fizz', method='get')
-              img.imgicon(src='./img/iconimg/Fizz.png')
-          .champname &#xD53C;&#xC988;
-      .test
-        .content-box
-          .img-box
-            form.form(action='/skin/Heimerdinger', method='get')
-              img.imgicon(src='./img/iconimg/Heimerdinger.png')
-          .champname &#xD558;&#xC774;&#xBA38;&#xB529;&#xAC70;
-      .test
-        .content-box
-          .img-box
-            form.form(action='/skin/Hecarim', method='get')
-              img.imgicon(src='./img/iconimg/Hecarim.png')
-          .champname &#xD5E4;&#xCE74;&#xB9BC;
+    .test
+      .content-box
+        .img-box
+          form.form(action='/skin/Fiora', method='get')
+            img.imgicon(src='./img/iconimg/Fiora.png')
+        .champname &#xD53C;&#xC624;&#xB77C;
+    .test
+      .content-box
+        .img-box
+          form.form(action='/skin/Fizz', method='get')
+            img.imgicon(src='./img/iconimg/Fizz.png')
+        .champname &#xD53C;&#xC988;
+    .test
+      .content-box
+        .img-box
+          form.form(action='/skin/Heimerdinger', method='get')
+            img.imgicon(src='./img/iconimg/Heimerdinger.png')
+        .champname &#xD558;&#xC774;&#xBA38;&#xB529;&#xAC70;
+    .test
+      .content-box
+        .img-box
+          form.form(action='/skin/Hecarim', method='get')
+            img.imgicon(src='./img/iconimg/Hecarim.png')
+        .champname &#xD5E4;&#xCE74;&#xB9BC;
+    .test
+      .t1
+        img(src='./img/iconimg/Teemo.png')
+        .champname &#xD2F0;&#xBAA8;
+    .test
+      .t1
+        img(src='./img/iconimg/Teemo.png')
+        .champname &#xD2F0;&#xBAA8;
+    .test
+      .t1
+        img(src='./img/iconimg/Teemo.png')
+        .champname &#xD2F0;&#xBAA8;
+    .test
+      .t1
+        img(src='./img/iconimg/Teemo.png')
+        .champname &#xD2F0;&#xBAA8;
+    .test
+      .t1
+        img(src='./img/iconimg/Teemo.png')
+        .champname &#xD2F0;&#xBAA8;
 script(src='https://unpkg.com/axios/dist/axios.min.js')
 script(src='./js/testFront.js')
