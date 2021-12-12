@@ -720,16 +720,21 @@ app.post('/skin/:name', (req, res) => {
             connection.query(sql, (err, result)=>{
                 if(err) throw err;
                 let point = result[0].cpoint;
+                let champid = result[0].champid;
                 
                 num = String(result[0].seq);
-                connection.query(`SELECT * FROM userinfo WHERE userid=("${req.session.uid}")`, (err, result) => {
+                connection.query(`SELECT * FROM userinfo WHERE userid=("${req.session.uid}")`, (err, result1) => {
                     if (err) throw err;
-                    let tmp = result[0].champseq;
-                    let money = result[0].userpoint;
+                    let tmp = result1[0].champseq;
+                    let money = result1[0].userpoint;
                     if(tmp==undefined || !tmp.includes(num)){
+                        let saleSkin = ['산타 브라움', '산타 그라가스', '얼음 왕자 문도', '눈사람 하이머딩거', '당돌한 엘프 징크스', '겨울 동화 카르마', '루돌프 코그모', '달콤 쌉싸름한 룰루', '겨울 동화 룰루', '눈맞이 축제 마오카이', '눈사람 마스터이', '겨울 동화 니코','눈토끼 니달리','겨울 동화 오리아나','눈꽃사슴 뽀삐','눈꽃 시비르','고요한 밤 소나', '겨울 동화 소라카', '행복한 엘프 티모', '나쁜 산타 베이가', '산타 질리언'];
                         if (money>point) {
                             tmp+=`/${num}`
-                            money-=point;
+                            if (saleSkin.includes(champid)) {
+                                money-=Math.floor(point/5*4);
+                            }
+                            else money-=point;
                             connection.query(`UPDATE userinfo SET champseq = ("${tmp}"), userpoint = ("${money}") WHERE userid="${req.session.uid}"`, (err, result) => {
                                 if (err) throw err;
                                 else {
