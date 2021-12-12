@@ -368,8 +368,7 @@ app.post('/board/write', (req, res) => {
 
             connection.query(pQuery, (err, result) => {
                 if(err) throw err;
-              
-                res.redirect('/board/page');
+                res.send('<script>alert("10포인트가 지급되었습니다"); window.location.href = "/board/page"; </script>');
             })
         })
         connection.release();
@@ -573,7 +572,7 @@ app.post('/board/comment', (req, res) => {
                 if(err) throw err;
                 
                 connection.release();
-                res.redirect('/board/read/' + board_idx);
+                res.send(`<script>alert("5포인트가 지급되었습니다"); window.location.href = "/board/read/+${board_idx}"; </script>`);
             })
         })
     });
