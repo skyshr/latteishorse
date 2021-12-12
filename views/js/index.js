@@ -1,6 +1,12 @@
 const moveAnimTriggerMargin = 250; // 스크롤 범위
 const moveAnimElementList = document.querySelectorAll('.moveAnim');
 
+const nidalImg = document.querySelector('.leftPopupImg');
+
+nidalImg.addEventListener('click', () => {
+    document.querySelector('.formnidal').submit();
+})
+
 
 const moveAnimFunc = function() {
     for (const element of moveAnimElementList) {
