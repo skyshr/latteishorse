@@ -20,75 +20,81 @@ body
             form(action='/board/update' method='post')
                 table(border='1')
                     input(type='hidden' name='idx' value=rows.idx)
-                    tbody
+                    tbody.tablecontainer
                         tr
-                            td.boardtop 작성자
+                            td.boardleft 작성자
                             td #{rows.userid}
                         tr
-                            td.boardtop 제목
+                            td.boardleft 제목
                             td
-                                input#title(type='text' name='title' value=rows.title required=''  style="width:99%;" readonly)
+                                input.titleCon(type='text' name='title' value=rows.title required=''  style="width:99%;" readonly)
                         tr
-                            td.boardtop 내용
+                            td.boardleft 내용
                             td
                                 textarea#content(name='content' cols='30' rows='10' required='' style="width:99%; resize:none;" readonly) #{rows.content}
                         tr
-                            td.boardtop 변경일
+                            td.boardleft 변경일
                             td #{rows.modidate}
                         tr
-                            td.boardtop 등록일
+                            td.boardleft 등록일
                             td #{rows.regdate}
                         tr
-                            td.boardtop 조회수
+                            td.boardleft 조회수
                             td #{rows.hit}
                         tr 
-                            td.boardtop 와드수
+                            td.boardleft 와드수
                             if(rows.likeuser == '0')
                                 td 0
                             if(rows.likeuser != '0')
                                 td #{rows.likeuser.split('/').length-1}
-
-                div
-                    a(href='/board/page') 목록
-            if(id==rows.userid)
-                form(action='/board/rewrite', method='get')
-                    button(type='submit') 글 수정
-            if(loginstate=='okay')
-                form(action='/board/like', method='post')
-                    if(!chklike)
-                        div
-                            input.likeBtn(type="image" src="/img/bush.png")
-                    if(chklike) 
-                        div
-                            input.likeBtn(type="image" src="/img/wardbush.png")
+            
+        div.listlike
             br
-            br
-            div
+            div.listlink
+                a(href='/board/page') 목록으로 돌아가기
+            div.like
                 if(loginstate=='okay')
-                    form(action="/board/comment" method = "post")
-                        input(type='hidden' name='idx' value=rows.idx)
-                        input.commentInput(name ="comment" type="text" required='')
-                        button(type="submit") 댓글 달기
-                if(!loginstate)
-                    input(value ="로그인 후 댓글을 달 수 있습니다" style="text-align:center; width:40%;" readonly )
-
-            div#commentlist
-                if(comrows.length>0)
-                    table(border=1)
-                        tbody
-                            tr.boardtop
-                                td 작성자
-                                td 내용
-                                -for(var i = 0; i<comrows.length; i++)
-                                    -var data = comrows[i]
-                                    tr
-                                        td(style="width:10%;") #{data.userid}
-                                        td 
-                                            div
-                                                textarea.commentCon  #{data.comments}
-                                            -if(id==data.userid)
-                                                div.commentBtn
-                                                    form(action="/board/comment/delete" method = "post")
-                                                        input(type='hidden' name='idx' value=rows.idx)
-                                                        input(type='hidden' name='comidx' value=data.idx)
-                                                        button(type="submit") 댓글 삭제
+                    form(action='/board/like', method='post')
+                        if(!chklike)
+                            div
+                                input.likeBtn(type="image" src="/img/bush.png")
+                        if(chklike) 
+                            div
+                                input.likeBtn(type="image" src="/img/wardbush.png")
+            div.rewrite 
+                if(id==rows.userid)
+                    form(action='/board/rewrite', method='get')
+                        input.rewriteBtn(type='submit' value="글 수정")
+        br
+        br
+        br
+        br
+        div
+            if(loginstate=='okay')
+                form(action="/board/comment" method = "post")
+                    input(type='hidden' name='idx' value=rows.idx)
+                    input.commentInput(name ="comment" type="text" required='')
+                    input.commentBtn(type="submit" value="댓글 작성")
+            if(!loginstate)
+                input(value ="로그인 후 댓글을 달 수 있습니다" style="text-align:center; width:40%;" readonly )
+        br
+        div#commentlist
+            if(comrows.length>0)
+                table(border=1)
+                    tbody
+                        tr.boardtop
+                            td 작성자
+                            td 내용
+                            -for(var i = 0; i<comrows.length; i++)
+                                -var data = comrows[i]
+                                tr
+                                    td.commentid #{data.userid}
+                                    td 
+                                        div
+                                            textarea.commentCon  #{data.comments}
+                                        -if(id==data.userid)
+                                            div.commentDel
+                                                form(action="/board/comment/delete" method = "post")
+                                                    input(type='hidden' name='idx' value=rows.idx)
+                                                    input(type='hidden' name='comidx' value=data.idx)
+                                                    input(type="submit" value="댓글 삭제")

@@ -18,13 +18,14 @@ input, textarea {
 }
 
 .boardlink{
-    text-align: center;
+    text-align: right;
+    margin-right: 22%;
 }
 
 table {
-    width:50%; 
-    margin-left:25%; 
-    margin-right:25%;
+    width:60%; 
+    margin-left:20%; 
+    margin-right:20%;
     text-align: center;
 }
 
@@ -37,9 +38,16 @@ table,th,td {
 }
 
 .boardtop{
-    height: 2cm;
-    font-size: large;
+    height: 1.5cm;
+    font-size: 20px;
     font-weight: 600;
+    border-bottom: 5px solid white;
+}
+.boardleft{
+    height: 1.5cm;
+    font-size: 20px;
+    font-weight: 600;
+    border-right: 5px solid white;
 }
 .boardnum{
     text-align: center;
@@ -47,6 +55,7 @@ table,th,td {
 }
 .boardid{
     text-align: center;
+    width: 15%;
 }
 .boardtitle{
     text-align: start;
@@ -67,7 +76,8 @@ table,th,td {
     text-align: start;
 }
 .searchinput, .commentInput{
-    width: 50%;
+    width: 40%;
+    background-color: rgb(54, 50, 66);
 }
 
 .likeBtn{
@@ -77,12 +87,69 @@ table,th,td {
 }
 
 .commentCon{
-    width: 80%;
+    width: 70%;
     margin-left: 3%;
     float: left;
     overflow: hidden;
     resize: none;
+    border: hidden;
+    font-size: 15px;
 }
-.commentBtn{
+.commentDel{
     float: right;
+}
+.titleCon{
+    border: hidden;
+    font-size: 20px;
+}
+#content{
+    font-size: 20px;
+}
+.listlink{
+    float:left;
+}
+.rewrite {
+    float: right;
+    margin-right: 5%;
+}
+.rewriteBtn, .writeBtn {
+    font-size: 20px;
+    background-color: rgb(12, 10, 19);
+    color: rgb(226, 164, 71);
+    cursor: pointer;
+}
+.commentBtn {
+    font-size: 15px;
+    cursor: pointer;
+}
+.listlike{
+    margin-right: 22%;
+    margin-left: 22%;
+}
+.like{
+    position: relative;
+    bottom: 2vh;
+    float: right;
+}
+
+.commentid {
+    width:20%
+}
+
+.tablecontainer {
+    font-size: 20px;
+}
+#title{
+    font-size: 20px;
+}
+
+.writeContainer{
+    width:99%; 
+    background-color: rgb(54, 50, 66);
+    resize:none;
+}
+
+.boardlist{
+    height: 1.5cm;
+    font-size: 20px;
 }

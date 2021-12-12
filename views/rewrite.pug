@@ -20,32 +20,32 @@ body
             form(action='/board/update' method='post')
                 table(border='1')
                     input(type='hidden' name='idx' value=rows.idx)
-                    tbody
+                    tbody.tablecontainer
                         tr
-                            td 작성자
+                            td.boardleft 작성자
                             td #{rows.userid}
                         tr
-                            td 제목
+                            td.boardleft 제목
                             td
-                                input#title(type='text' name='title' value=rows.title required=''  style="width:99%;")
+                                input.writeContainer#title(type='text' name='title' value=rows.title required='')
                         tr
-                            td 내용
+                            td.boardleft 내용
                             td
-                                textarea#content(name='content' cols='30' rows='10' required='' style="width:99%; resize:none;") #{rows.content}
+                                textarea.writeContainer#content(name='content' cols='30' rows='10' required='') #{rows.content}
                         tr
-                            td 변경일
+                            td.boardleft 변경일
                             td #{rows.modidate}
                         tr
-                            td 등록일
+                            td.boardleft 등록일
                             td #{rows.regdate}
                         tr
-                            td 조회수
+                            td.boardleft 조회수
                             td #{rows.hit}
                 div
-                    a(href='/board/page') 목록
+                    a(href='/board/page') 목록으로 돌아가기
                 if(loginstate=='okay')
-                    button(type='submit')  글 수정
+                    input.rewriteBtn(type='submit' value="글 수정")
             if(loginstate=='okay')
                 form(action='/board/delete' method = 'post')
                     input(type='hidden' name='idx' value=rows.idx)
-                    button(type='submit')  글 삭제
+                    input.rewriteBtn(type='submit' value="글 삭제")
