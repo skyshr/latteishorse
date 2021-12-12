@@ -6,6 +6,7 @@ head(lang="ko")
   title #{title}
   link(rel='stylesheet', href='/css/header.css', type='text/css')
   link(rel='stylesheet', href='/css/table.css', type='text/css')
+  link(rel='stylesheet', href='/css/boardtable.css', type='text/css')
   link(rel='stylesheet', href='/css/infoBox.css', type='text/css')
 
 body 
@@ -15,7 +16,7 @@ body
     include ./infoBox.pug
 
     main
-        h1 #{title}
+        h1.maintitle #{title}
         form(action='/board/write' method='post')
             table(border='1')
                 tbody

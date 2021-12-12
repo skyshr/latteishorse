@@ -6,24 +6,8 @@ table {
     width:50%; 
     margin-left:25%; 
     margin-right:25%;
-    /* color: rgb(226, 164, 71);
-    border-color: white;
-    border-collapse: collapse; */
 }
 
 img {
     width: 95%;
 }
-/* body {
-    background-color: rgb(12, 10, 19);
-}
-  
-a {
-text-decoration: none;
-color: var(--navText-color);
-}
-
-input, textarea {
-    background-color: rgb(12, 10, 19);
-    color: rgb(226, 164, 71);
-} */

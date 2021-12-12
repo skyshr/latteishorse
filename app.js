@@ -272,28 +272,35 @@ app.get('/board/page/:page', (req, res) => { // 게시글 리스트에 :page가 
     var page = req.params.page; // 현재 페이지는 params 을 req 요청받아옴
     pool.getConnection((err, connection) => {
         if(err) throw err;
-        var sQuery =  "select idx, userid, title, date_format(modidate,'%Y-%m-%d %H:%i:%s') modidate, " +
-        "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard";  // select 구절 그대로
+        //date format을 바꾸면 다르게 보여줄 수 있음
+        // var sQuery =  "select idx, userid, title, date_format(modidate,'%Y-%m-%d %H:%i:%s') modidate, " + 
+        // "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard";  // select 구절 그대로
+        var sQuery =  "select idx, userid, title, date_format(modidate,'%Y-%m-%d') modidate, " +
+        "date_format(regdate,'%Y-%m-%d') regdate, hit from userboard";  // select 구절 그대로
 
-        connection.query(sQuery, (err, rows) => {
-            if (err) throw err;
-            if (req.session.uid==null) {
-                let dataPrim = null;
-                connection.release();
-                return res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim}); 
-            }
-            connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
+        var cQuery = "SELECT board_idx from commentboard";
+        connection.query(cQuery, (err, comment) => {
+            if(err) throw err;
+            connection.query(sQuery, (err, rows) => {
                 if (err) throw err;
-                
-                let id = result[0].userid;
-                let point = result[0].userpoint;
-                let dataPrim = {id: id, point: point};
-                connection.release();
-                return res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim}); 
-            })
-            // res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid}); 
-            // length 데이터 전체넘버 랜더링,-1을 한이유는 db에서는1부터지만 for문에서는 0부터 시작 ,page_num: 한페이지에 보여줄 갯수
-            // console.log(rows.length-1);
+                if (req.session.uid==null) {
+                    let dataPrim = null;
+                    connection.release();
+                    return res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim, comment:comment}); 
+                }
+                connection.query(`SELECT * FROM userinfo WHERE userid= "${req.session.uid}"`, (err, result) => {
+                    if (err) throw err;
+                    
+                    let id = result[0].userid;
+                    let point = result[0].userpoint;
+                    let dataPrim = {id: id, point: point};
+                    connection.release();
+                    return res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid, dataPrim: dataPrim, comment:comment}); 
+                })
+                // res.render('boardpage', {title : '글목록', rows:rows, page:page, length:rows.length-1, page_num:10, pass:true, loginstate:req.session.loginstate, id:req.session.uid});
+                // length 데이터 전체넘버 랜더링,-1을 한이유는 db에서는1부터지만 for문에서는 0부터 시작 ,page_num: 한페이지에 보여줄 갯수
+                // console.log(rows.length-1);
+            });
         });
         // connection.release();
     });
@@ -305,7 +312,7 @@ app.post('/board/search', (req,res) => {
     console.log(item + searchvalue);
     pool.getConnection((err, connection) => {
         if(err) throw err;
-        var sQuery =  `select idx, userid, title, date_format(modidate,'%Y-%m-%d %H:%i:%s') modidate, date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit from userboard where ${item}="${searchvalue}"`;  
+        var sQuery =  `select idx, userid, title, date_format(modidate,'%Y-%m-%d') modidate, date_format(regdate,'%Y-%m-%d') regdate, hit from userboard where ${item}="${searchvalue}"`;  
 
         connection.query(sQuery, (err, rows) => {
             if (err) throw err;
@@ -372,6 +379,7 @@ app.post('/board/write', (req, res) => {
 app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로 받을거
     var idx = req.params.idx; // :idx 로 맵핑할 req 값을 가져온다
     req.session.idx = idx;
+    var logid =req.session.uid;
     pool.getConnection((err, connection) =>{ //조회수 1씩 증가
         if(err) throw err;
         var hQuery = `UPDATE userboard set hit=hit+1 where idx='${idx}'`;
@@ -381,6 +389,8 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
             "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit, likeuser from userboard where idx=?";
             connection.query(sQuery,[idx], (err, rows) => {  // 한개의 글만조회하기때문에 마지막idx에 매개변수를 받는다
                 if(err) throw err;
+                var likeusers = rows[0].likeuser.split('/'); // 좋아요 누른 id들의 배열
+                var chklike = likeusers.includes(logid); // 좋아요 누른 user에 포함되어 있는지
                 var cQuery = "SELECT idx, userid, comments from commentboard where board_idx=?";
                 connection.query(cQuery,[idx], (err, comrows) => {
                     if(err) throw err;
@@ -395,7 +405,7 @@ app.get('/board/read/:idx', (req, res) => { // board/read/idx숫자 형식으로
                         
                         req.session.idx = idx;
                         connection.release();
-                        return res.render('read', {title : '글 상세보기', rows:rows[0], comrows:comrows, loginstate:req.session.loginstate, id:req.session.uid, dataPrim:dataPrim}); // 첫번째행 한개의데이터만 랜더링 요청
+                        return res.render('read', {title : '글 상세보기', rows:rows[0], comrows:comrows, loginstate:req.session.loginstate, id:req.session.uid, dataPrim:dataPrim, chklike:chklike}); // 첫번째행 한개의데이터만 랜더링 요청
                     })
                 })
                     // res.render('read', {title : '글 상세보기', rows:rows[0], comrows:comrows, loginstate:req.session.loginstate, id:req.session.uid}); // 첫번째행 한개의데이터만 랜더링 요청
@@ -419,7 +429,8 @@ app.post('/board/like', (req, res) => {
                 if(err) throw err;
     
                 var likeusers = result[0].likeuser.split('/'); //배열
-                if(!likeusers.includes(id)) {
+                var chklike = likeusers.includes(id); // 좋아요 누른 user에 포함되어 있는지
+                if(!chklike) {
                     likeusers.push(id);
                     var likeuserstr = likeusers.join('/');
                     var sQuery =`UPDATE userboard set likeuser="${likeuserstr}" where idx='${idx}'`;

@@ -6,6 +6,7 @@ head(lang="ko")
   title #{title}
   link(rel='stylesheet', href='/css/header.css', type='text/css')
   link(rel='stylesheet', href='/css/table.css', type='text/css')
+  link(rel='stylesheet', href='/css/boardtable.css', type='text/css')
   link(rel='stylesheet', href='/css/infoBox.css', type='text/css')
 body
     header 
@@ -21,27 +22,27 @@ body
                     input(type='hidden' name='idx' value=rows.idx)
                     tbody
                         tr
-                            td 작성자
+                            td.boardtop 작성자
                             td #{rows.userid}
                         tr
-                            td 제목
+                            td.boardtop 제목
                             td
                                 input#title(type='text' name='title' value=rows.title required=''  style="width:99%;" readonly)
                         tr
-                            td 내용
+                            td.boardtop 내용
                             td
                                 textarea#content(name='content' cols='30' rows='10' required='' style="width:99%; resize:none;" readonly) #{rows.content}
                         tr
-                            td 변경일
+                            td.boardtop 변경일
                             td #{rows.modidate}
                         tr
-                            td 등록일
+                            td.boardtop 등록일
                             td #{rows.regdate}
                         tr
-                            td 조회수
+                            td.boardtop 조회수
                             td #{rows.hit}
                         tr 
-                            td 좋아요수
+                            td.boardtop 좋아요수
                             if(rows.likeuser == '0')
                                 td 0
                             if(rows.likeuser != '0')
@@ -52,9 +53,14 @@ body
             if(id==rows.userid)
                 form(action='/board/rewrite', method='get')
                     button(type='submit') 글 수정
-            if(loginstate=='okay')        
+            if(loginstate=='okay')
                 form(action='/board/like', method='post')
-                    button(type='submit') 좋아요
+                    if(!chklike)
+                        div
+                            input.likeBtn(type="image" src="/img/empty.png")
+                    if(chklike) 
+                        div
+                            input.likeBtn(type="image" src="/img/full.png")
             br
             br
             div
@@ -70,16 +76,19 @@ body
                 if(comrows.length>0)
                     table(border=1)
                         tbody
-                            td 작성자
-                            td 내용
-                            -for(var i = 0; i<comrows.length; i++)
-                                -var data = comrows[i]
-                                tr
-                                    td(style="width:10%;") #{data.userid}
-                                    td #{data.comments}
-                                    -if(id==data.userid)
-                                        td(style="border:0; width:10%;")
-                                            form(action="/board/comment/delete" method = "post")
-                                                input(type='hidden' name='idx' value=rows.idx)
-                                                input(type='hidden' name='comidx' value=data.idx)
-                                                button(type="submit") 댓글 삭제
+                            tr.boardtop
+                                td 작성자
+                                td 내용
+                                -for(var i = 0; i<comrows.length; i++)
+                                    -var data = comrows[i]
+                                    tr
+                                        td(style="width:10%;") #{data.userid}
+                                        td 
+                                            div
+                                                textarea.commentCon  #{data.comments}
+                                            -if(id==data.userid)
+                                                div.commentBtn
+                                                    form(action="/board/comment/delete" method = "post")
+                                                    input(type='hidden' name='idx' value=rows.idx)
+                                                    input(type='hidden' name='comidx' value=data.idx)
+                                                    button(type="submit") 댓글 삭제
