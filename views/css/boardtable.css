@@ -73,7 +73,7 @@ table,th,td {
     text-align: center;
 }
 .pagenum{
-    text-align: start;
+    text-align: center;
 }
 .searchinput, .commentInput{
     width: 40%;
@@ -87,7 +87,7 @@ table,th,td {
 }
 
 .commentCon{
-    width: 70%;
+    width: 80%;
     margin-left: 3%;
     float: left;
     overflow: hidden;
@@ -150,6 +150,6 @@ table,th,td {
 }
 
 .boardlist{
-    height: 1.5cm;
+    height: 2cm;
     font-size: 20px;
 }
