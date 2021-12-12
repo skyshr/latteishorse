@@ -735,17 +735,18 @@ app.post('/skin/:name', (req, res) => {
                                 else {
                                     console.log(result);
                                     res.send(`<script>alert("구매 완료 되었습니다.");
-                                    window.location.href='/';</script>`);
+                                    window.location.href='/skin/${req.params.name.split('_')[0]}';</script>`);
                                 }
                             });
                         }
                         else {
-                            res.send(`<script>alert("포인트가 부족합니다.")</script>`)
+                            res.send(`<script>alert("포인트가 부족합니다.");
+                            window.location.href='/skin/${req.params.name.split('_')[0]}'</script>`)
                         }
                     }
                     else{
                         res.send(`<script>alert("이미 보유한 스킨입니다");
-                        window.location.href='/';</script>`);
+                        window.location.href='/skin/${req.params.name.split('_')[0]}';</script>`);
                     }
 
                 })

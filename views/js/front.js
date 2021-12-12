@@ -31,6 +31,7 @@ function make() {
                 tmp.setAttribute('id', 'test');
                 tmp.innerHTML = '포인트 부족';
                 tmp.style.fontSize = "80%";
+                tmp.style.fontWeight = "600";
                 tmp.style.color = "red";
                 btnBox[element].appendChild(tmp);
             // }
@@ -44,7 +45,8 @@ function make() {
                 tmp.setAttribute('id', 'test');
                 tmp.innerHTML = '구매 가능';
                 tmp.style.fontSize = "80%";
-                tmp.style.color = "green"
+                tmp.style.fontWeight = "600";
+                tmp.style.color = "white"
                 btnBox[element].appendChild(tmp);
             // }
         }
