@@ -42,7 +42,7 @@ body
                             td.boardtop 조회수
                             td #{rows.hit}
                         tr 
-                            td.boardtop 좋아요수
+                            td.boardtop 와드수
                             if(rows.likeuser == '0')
                                 td 0
                             if(rows.likeuser != '0')
@@ -57,17 +57,17 @@ body
                 form(action='/board/like', method='post')
                     if(!chklike)
                         div
-                            input.likeBtn(type="image" src="/img/empty.png")
+                            input.likeBtn(type="image" src="/img/bush.png")
                     if(chklike) 
                         div
-                            input.likeBtn(type="image" src="/img/full.png")
+                            input.likeBtn(type="image" src="/img/wardbush.png")
             br
             br
             div
                 if(loginstate=='okay')
                     form(action="/board/comment" method = "post")
                         input(type='hidden' name='idx' value=rows.idx)
-                        input#comment(name ="comment" type="text" required='')
+                        input.commentInput(name ="comment" type="text" required='')
                         button(type="submit") 댓글 달기
                 if(!loginstate)
                     input(value ="로그인 후 댓글을 달 수 있습니다" style="text-align:center; width:40%;" readonly )
@@ -89,6 +89,6 @@ body
                                             -if(id==data.userid)
                                                 div.commentBtn
                                                     form(action="/board/comment/delete" method = "post")
-                                                    input(type='hidden' name='idx' value=rows.idx)
-                                                    input(type='hidden' name='comidx' value=data.idx)
-                                                    button(type="submit") 댓글 삭제
+                                                        input(type='hidden' name='idx' value=rows.idx)
+                                                        input(type='hidden' name='comidx' value=data.idx)
+                                                        button(type="submit") 댓글 삭제

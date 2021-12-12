@@ -66,21 +66,22 @@ table,th,td {
 .pagenum{
     text-align: start;
 }
-.searchinput{
+.searchinput, .commentInput{
     width: 50%;
 }
 
 .likeBtn{
     display: inline-block;
-    width: 1cm;
-    height: 1cm;
+    width: 1.5cm;
+    height: 1.5cm;
 }
 
 .commentCon{
-    max-width: 70%;
+    width: 80%;
     margin-left: 3%;
     float: left;
     overflow: hidden;
+    resize: none;
 }
 .commentBtn{
     float: right;
