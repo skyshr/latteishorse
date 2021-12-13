@@ -33,7 +33,7 @@ main
                 .text-box #{test[i].skin}
                 .price
                     img.money-icon(src='/img/money.png')
-                    span.test #{test[i].money}
+                    span.point #{test[i].money}
                 //- test[i] = img/skin/Garen/Garen_0.jpg
                 form(class='form' action='/skin/'+ (test[i].imgsrc.split('/')[3]).split('.')[0], method='post')
                     .btn-box

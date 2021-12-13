@@ -685,7 +685,7 @@ app.get('/skinTrade', (req, res) => {
     if (req.session.loginstate==undefined) {
         // let dataPrim = {id: '', point: ''};
         let dataPrim = null
-        return res.render('test2', {dataPrim:dataPrim})
+        return res.render('skin', {dataPrim:dataPrim})
     }
     try {
         pool.getConnection((err, connection) => {
@@ -696,7 +696,7 @@ app.get('/skinTrade', (req, res) => {
                 let point = result[0].userpoint;
                 console.log("id, point : " + id + " " + point);
                 let dataPrim = {id: id, point: point};
-                res.render('test2', {dataPrim: dataPrim,  loginstate:req.session.loginstate, id:req.session.uid});
+                res.render('skin', {dataPrim: dataPrim,  loginstate:req.session.loginstate, id:req.session.uid});
             });
             connection.release();
         });

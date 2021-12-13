@@ -97,7 +97,7 @@ async function placeImg(line) {
             const champname = document.createElement('div');
             const img = document.createElement('img');
             form.setAttribute('method', 'get');
-            test.setAttribute('class', 'test');
+            test.setAttribute('class', 'full-box');
             champname.setAttribute('class', 'champname');
             imgBox.setAttribute('class', 'img-box');
             contentBox.setAttribute('class', 'content-box');
