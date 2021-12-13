@@ -1,0 +1,124 @@
+doctype html
+head(lang="ko")
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible', content='IE=edge')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  title #{title}
+  link(rel='stylesheet', href='/css/header.css', type='text/css')
+  link(rel='stylesheet', href='/css/table.css', type='text/css')
+  link(rel='stylesheet', href='/css/boardtable.css', type='text/css')
+  link(rel='stylesheet', href='/css/infoBox.css', type='text/css')
+body
+    header 
+        include ./header.pug
+
+        include ./infoBox.pug
+
+    main(style="text-align : center")
+        h1 #{title}
+        div
+            form(action='/board/update' method='post')
+                table(border='1')
+                    input(type='hidden' name='idx' value=rows.idx)
+                     //- app.js 387번째줄 sQuery = "SELECT idx, userid, title, content, date_format(modidate, '%Y-%m-%d %H:%i:%s') modidate, " +  "date_format(regdate,'%Y-%m-%d %H:%i:%s') regdate, hit, likeuser from userboard where idx=?"; 
+                     //- 조건 where idx=?가 들어갔기 때문에 특정 idx를 가진 데이터만 받는다
+                            connection.query(sQuery,[idx], (err, rows) => { 에서 [idx]는 쿼리문의 ?에 순서대로 들어가게 된다 배열 형태로 여러개주고 쿼리문에서 ? 여러개 사용가능 (366번째 줄에서 여러개 사용함)
+                     //- 특정 idx에 해당하는 게시글 데이터는 하나이기 때문에 쿼리실행결과의 rows는 [{idx:--,userid:--,...}] 형태로 한개의 오브젝트가 들어간 배열형태이다
+                     //- read.pug에서 변수로 넘겨받은 rows는 boardpage.pug에서와 달리 389번째줄의 쿼리실행결과 connection.query(sQuery,[idx], (err, rows) => {
+                        의 rows가 아닌 rows[0]이며 (407번째줄에서 render할 때 그렇게 변수로 넘겨줌)  {idx:--,userid:--,...}인 오브젝트 형태이다 따라서 rows.idx로 사용 (boardpage.pug에서는 rows[i].idx의 형태로 value를 사용)
+                        
+
+
+                    tbody.tablecontainer
+                        tr
+                            td.boardleft 작성자
+                            td #{rows.userid}
+                        tr
+                            td.boardleft 제목
+                            td
+                                input.titleCon(type='text' name='title' value=rows.title required=''  style="width:99%;" readonly)
+                        tr
+                            td.boardleft 내용
+                            td
+                                textarea#content(name='content' cols='30' rows='10' required='' style="width:99%; resize:none;" readonly) #{rows.content}
+                        tr
+                            td.boardleft 변경일
+                            td #{rows.modidate}
+                        tr
+                            td.boardleft 등록일
+                            td #{rows.regdate}
+                        tr
+                            td.boardleft 조회수
+                            td #{rows.hit}
+                        tr 
+                            td.boardleft 와드수
+                            if(rows.likeuser == '0')
+                                    //- 해당 게시글의 likeuser가 0이면(기본값으로 0을 주었기때문에 좋아요 누른 유저수가 0)
+                                td 0
+                            if(rows.likeuser != '0')
+                                td #{rows.likeuser.split('/').length-1}
+                                //- likeuser데이터는 해당글에 좋아요 누른 userid를 /로 구분해 string형태로 저장 ex)0/usera/userb/userc/userd
+                                    split('/')하면 괄호안의 구분자 /를 통해 string을 나누고 나눠진 요소들로 배열을 만든다 ex)[0,usera,userb,userc,userd]
+                                    기본값으로 0이 들어가있기 때문에 length-1해주면 좋아요 누른 개수
+            
+        div.listlike
+            br
+            div.listlink
+                a(href='/board/page') 목록으로 돌아가기
+            div.like
+                if(loginstate=='okay')
+                    form(action='/board/like', method='post')
+                        if(!chklike)
+                            //-chklike는 app.js 392번째 줄에서 정의하고 넘겨준 변수이다 var chklike = likeusers.includes(logid); 
+                                likeusers = rows.likeuser.split('/') 좋아요 누른 유저들의 배열
+                                logid는 381번째 줄에서 로그인세션에 들어있는 id로 선언해줌
+                                chklike가 false이면 likeusers배열에 로그인된 id가 없다는 뜻 -> 좋아요 안누른 상태
+                                true이면 로그인된 id가 배열안에 포함된다 -> 좋아요 누른 상태
+                            div
+                                input.likeBtn(type="image" src="/img/bush.png")
+                        if(chklike) 
+                            div
+                                input.likeBtn(type="image" src="/img/wardbush.png")
+            div.rewrite 
+                if(id==rows.userid)
+                    form(action='/board/rewrite', method='get')
+                        input.rewriteBtn(type='submit' value="글 수정")
+        br
+        br
+        br
+        br
+        div
+            if(loginstate=='okay')
+                form(action="/board/comment" method = "post")
+                    input(type='hidden' name='idx' value=rows.idx)
+                    input.commentInput(name ="comment" type="text" required='')
+                    input.commentBtn(type="submit" value="댓글 작성")
+            if(!loginstate)
+                input(value ="로그인 후 댓글을 달 수 있습니다" style="text-align:center; width:40%;" readonly )
+        br
+        div#commentlist
+            if(comrows.length>0)
+                //- comrows는 394번째줄의 쿼리실행 결과이다 cQuery = "SELECT idx, userid, comments from commentboard where board_idx=?";  <--여기서의 idx는 comment의 idx
+                    board_idx는 게시글의 idx이므로 상세보기 중인 게시글의 댓글 데이터만 불러온 배열이다 [{idx:--,userid:--,comments:--},{idx:--,userid:--,comments:--}...]
+                    length가 0이라면 댓글이 없으므로 0보다 클때만 테이블을 생성하도록 한다
+                table(border=1)
+                    tbody
+                        tr.boardtop
+                            td 작성자
+                            td 내용
+                            -for(var i = 0; i<comrows.length; i++)
+                                -var data = comrows[i] //data는 각각 댓글 데이터 오브젝트이다 {idx:--,userid:--,comments:--}
+                                tr
+                                    td.commentid #{data.userid}
+                                    td 
+                                        div
+                                            textarea.commentCon  #{data.comments}
+                                        -if(id==data.userid) //id는 session에 들어가 있는 로그인된 id이다 (chklike설명시 사용한 logid는 app.js에서 정의한 변수이고 read.pug에 넘겨줄때는 app.js 407번째 줄에서 id로 넘겨줌)
+                                                             //- 댓글 작성자 본인일때만 댓글 삭제 버튼 활성화
+                                            div.commentDel
+                                                form(action="/board/comment/delete" method = "post")
+                                                    input(type='hidden' name='idx' value=rows.idx)
+                                                    input(type='hidden' name='comidx' value=data.idx)
+                                                     //- form 내부에 name으로 존재해야 req.body.idx, req.body.comidx로 읽을 수 있기 때문에 hidden처리해서 같이 넣어준것임
+                                                        req.body. 형태로 읽을때는 name을 통해 해당 요소를 읽어들임
+                                                    input(type="submit" value="댓글 삭제")

@@ -1,0 +1,78 @@
+doctype html
+head(lang="ko")
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible', content='IE=edge')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  title #{title}
+  link(rel='stylesheet', href='/css/header.css', type='text/css')
+  link(rel='stylesheet', href='/css/table.css', type='text/css')
+  link(rel='stylesheet', href='/css/boardtable.css', type='text/css')
+  link(rel='stylesheet', href='/css/infoBox.css', type='text/css')
+
+body
+    header 
+        include ./header.pug
+
+        include ./infoBox.pug
+    
+    main
+        h1.maintitle #{title}
+
+        div.tablecontainer
+            br
+            table
+                tbody
+                    tr.boardtop
+                        td.boardnum 번호
+                        td.boardid 작성자
+                        td 제목
+                        td.boardhit 조회수
+                        td.boarddate 수정일
+                        td.boarddate 등록일
+                        
+                    -for(var i = (page * page_num) - page_num; i<(page * page_num); i++)
+                        
+                        -if(i > length) 
+                            -var data = {} // pug에서 자바스크립트를 쓰기 위해선 앞에 -필요
+                        -else var data = rows[i] // rows는 app.js 284쨰줄의 쿼리 sQuery =  "select idx, userid, title, date_format(modidate,'%Y-%m-%d') modidate, " + "date_format(regdate,'%Y-%m-%d') regdate, hit from userboard";
+                                                 //- 의 결과로 각 게시글의 db가 배열형태로 있는상태이다 [{idx:--,userid:--,title,--...},{idx:--,userid:--,title,--...}] 따라서 data = rows[i]는 각 게시글의 정보가 오브젝트형태로 되어있음
+                                                 
+                                                 
+                            -var commentnum = comment.filter((e)=>e.board_idx==data.idx).length 
+                                                 //- comment는 app.js 282번째줄 쿼리 cQuery = "SELECT board_idx from commentboard"; 의결과로 각 댓글의 board_idx가 배열형태로 되어있다 board_idx는 댓글이 달려있는 해당게시글의 idx를 외래키로 받아옴
+                                                 //- 외래키로 받아온 이유는 부모테이블 userboard의 데이터가 삭제됐을 때 (게시글이 삭제됐을 때) 자식테이블 commentboard의 삭제된게시글의 댓글 데이터도 같이 삭제하기위해
+                                                    (워크벤치에서 table형성시 delete cascade옵션 필요)
+                                                 //- filter함수를 쓰면 해당조건에 해당하는 요소만을 빼서 다시 배열 형성한다. comment는 [{board_idx:--},{board_idx:--},{board_idx:--}]형태 e는 각 요소인 {board_idx:--} 오브젝트 형태이다 따라서 e.board_idx로 비교할 수있다
+                                                 //- commentnum은 따라서 해당 게시글의 댓글 개수 
+                            tr.boardlist
+                                td.boardnum #{i + 1}
+                                td.boardid #{data.userid} 
+                                                //- 오브젝트형태이기 때문에 이렇게 값을 불러 올 수 있다
+                                td
+                                    a.boardtitle(href='/board/read/' + data.idx) #{data.title}
+                                        if(commentnum!=0)
+                                            span.commentnum [#{commentnum}]
+                                td.boardhit #{data.hit}
+                                td.boarddate #{data.modidate}
+                                td.boarddate #{data.regdate}
+
+                
+                    tr
+                        td.pagenum(colspan='6')
+                            -for (var j = 0; j < rows.length / page_num; j++) 
+                                a(href='/board/page/' + (j + 1)) #{j+1}
+                                span &nbsp&nbsp
+
+                    tr
+                        td.searchform(colspan='6')
+                            form(action="/board/search/" method = "post")
+                                select(name="category")
+                                    option(value="userid") 글쓴이
+                                    option(value="title") 제목
+                                input.searchinput(name ="search" type="text" required='')
+                                input(type="submit" value="검색")
+            div.boardlink
+                if(loginstate=='okay') 
+                        //-세션확인해서 로그인상태일때만 글 쓸 수 있음
+                    a(href='/board/write')
+                        button.writeBtn 글쓰기
